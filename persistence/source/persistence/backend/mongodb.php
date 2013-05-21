@@ -24,5 +24,25 @@ namespace Components;
       return new Persistence_View_Mongodb($this, $name_);
     }
     //--------------------------------------------------------------------------
+
+
+    // STATIC ACCESSORS
+    /**
+     * Scans default locations for a mongodb server socket.
+     *
+     * @return string
+     */
+    public static function lookupSocket()
+    {
+      /* @var $path Io_Path */
+      foreach(Io::systemTmpPath() as $path)
+      {
+        if(preg_match('/mongo[-\D.sock]/', $path->getPath()))
+          return $path->getPath();
+      }
+
+      return null;
+    }
+    //--------------------------------------------------------------------------
   }
 ?>

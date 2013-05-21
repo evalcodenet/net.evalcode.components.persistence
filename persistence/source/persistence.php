@@ -14,6 +14,13 @@ namespace Components;
    */
   class Persistence
   {
+    // PREDEFINED PROPERTIES
+    const PROFILE='PROFILE';
+    const LOG_QUERIES='LOG_QUERIES';
+    const LOG_STATEMENTS='LOG_STATEMENTS';
+    //--------------------------------------------------------------------------
+
+
     // STATIC ACCESSORS
     /**
      * @param string $name_

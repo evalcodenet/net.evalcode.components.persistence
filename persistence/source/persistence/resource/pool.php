@@ -17,11 +17,11 @@ namespace Components;
   {
     // PROPERTIES
     /**
-     * @var Components\Persistence_Resource
+     * @var \Components\Persistence_Resource
      */
     public $resource;
     /**
-     * @var Components\Persistence_Resource
+     * @var \Components\Persistence_Resource
      */
     public $resourceReadOnly;
     //--------------------------------------------------------------------------
@@ -42,9 +42,9 @@ namespace Components;
           );
         }
 
-        if($resource->isReadOnly())
-          $this->m_read[]=$resource;
-        else
+        $this->m_read[]=$resource;
+
+        if(!$resource->isReadOnly())
           $this->m_write[]=$resource;
       }
 
@@ -58,6 +58,60 @@ namespace Components;
 
 
     // OVRRIDES/IMPLEMENTS
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::execute()
+     */
+    public function execute($query_)
+    {
+      return $this->resource->{parent::$m_methodExecute}($query_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::execute()
+     */
+    public function executeLogged($query_)
+    {
+      return $this->resource->executeLogged($query_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::driver()
+     */
+    public function driver()
+    {
+      return $this->resource->driver();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::transactionBegin()
+     */
+    public function transactionBegin()
+    {
+      $this->resource->transactionBegin();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::transactionCommit()
+     */
+    public function transactionCommit()
+    {
+      $this->resource->transactionCommit();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::transactionRollback()
+     */
+    public function transactionRollback()
+    {
+      $this->resource->transactionRollback();
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Components\Object::hashCode()
@@ -98,6 +152,16 @@ namespace Components;
     // IMPLEMENTATION
     private $m_read=array();
     private $m_write=array();
+    //-----
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::executeImpl()
+     */
+    protected function executeImpl($query_)
+    {
+      return $this->resource->executeImpl($query_);
+    }
     //--------------------------------------------------------------------------
   }
 ?>

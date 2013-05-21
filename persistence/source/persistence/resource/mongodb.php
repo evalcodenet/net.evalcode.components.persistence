@@ -23,6 +23,17 @@ namespace Components;
       $this->resourceReadOnly=$this;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::driver()
+     *
+     * @return \MongoDB
+     */
+    public function driver()
+    {
+
+    }
+
 /*
     public function connection()
     {
@@ -100,6 +111,10 @@ namespace Components;
 
     // IMPLEMENTATION
     private $m_resourceIdentifiers=array();
+    /**
+     * @var \MongoDB
+     */
+    private $m_mongo;
     /*
     private static $m_instance;
     private $m_connection;
