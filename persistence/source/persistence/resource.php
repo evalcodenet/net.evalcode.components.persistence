@@ -15,13 +15,18 @@ namespace Components;
   abstract class Persistence_Resource implements Resource
   {
     // PREDEFINED PROPERTIES
+    const DEBUG_PROFILE=1;
+    const DEBUG_LOG_STATEMENTS=2;
+    const DEBUG_LOG_QUERIES=4;
+
+    const METHOD_QUERY='queryImpl';
+    const METHOD_QUERY_DEBUG='queryDebug';
+
+    const METHOD_INVOKE='invokeImpl';
+    const METHOD_INVOKE_DEBUG='invokeDebug';
+
     const METHOD_EXECUTE='executeImpl';
-    const METHOD_EXECUTE_LOGGED='executeLogged';
-    //--------------------------------------------------------------------------
-
-
-    // PROPERTIES
-    public static $logStatements=false;
+    const METHOD_EXECUTE_DEBUG='executeDebug';
     //--------------------------------------------------------------------------
 
 
@@ -41,6 +46,7 @@ namespace Components;
     public function __construct(Uri $uri_=null)
     {
       $this->m_uri=$uri_;
+      $this->m_cacheNamespace='persistence/resource/'.md5(spl_object_hash($this));
     }
     //--------------------------------------------------------------------------
 
@@ -55,16 +61,36 @@ namespace Components;
     }
 
     /**
-     * @param boolean $enabled_
+     * @param integer $bitMask_
      */
-    public static function logStatements($enabled_=true)
+    public static function debugMode($bitMask_)
     {
-      self::$logStatements=$enabled_;
+      self::$m_debugMode=$bitMask_;
 
-      if(true===$enabled_)
-        self::$m_methodExecute=self::METHOD_EXECUTE_LOGGED;
+      if(0<(self::$m_debugMode&self::DEBUG_PROFILE))
+      {
+        self::$m_methodQuery=self::METHOD_QUERY_DEBUG;
+        self::$m_methodInvoke=self::METHOD_INVOKE_DEBUG;
+        self::$m_methodExecute=self::METHOD_EXECUTE_DEBUG;
+      }
       else
-        self::$m_methodExecute=self::METHOD_EXECUTE;
+      {
+        if(0<(self::$m_debugMode&self::DEBUG_LOG_QUERIES))
+          self::$m_methodQuery=self::METHOD_QUERY_DEBUG;
+        else
+          self::$m_methodQuery=self::METHOD_QUERY;
+
+        if(0<(self::$m_debugMode&self::DEBUG_LOG_STATEMENTS))
+        {
+          self::$m_methodInvoke=self::METHOD_EXECUTE_DEBUG;
+          self::$m_methodExecute=self::METHOD_EXECUTE_DEBUG;
+        }
+        else
+        {
+          self::$m_methodInvoke=self::METHOD_EXECUTE;
+          self::$m_methodExecute=self::METHOD_EXECUTE;
+        }
+      }
     }
     //--------------------------------------------------------------------------
 
@@ -80,25 +106,86 @@ namespace Components;
     abstract public function driver();
 
     /**
-     * @param string $query_
+     * Return underlying connection or resource.
+     *
+     * @return mixed
      *
      * @throws \Components\Persistence_Exception
      */
-    public function execute($query_)
+    abstract public function connection();
+
+    abstract public function collectionExists($name_);
+    abstract public function collectionCreate($name_);
+    abstract public function collectionDrop($name_);
+
+    /**
+     * @param string $statement_
+     */
+    public function query($statement_)
     {
-      return $this->{self::$m_methodExecute}($query_);
+      return $this->queryImpl($statement_);
     }
 
     /**
-     * @param string $query_
+     * @param string $statement_
+     */
+    public function queryDebug($statement_)
+    {
+      Log::debug('persistence/resource', $statement_);
+
+      return $this->queryImpl($statement_);
+    }
+
+    /**
+     * @param \Components\Command|\Callable|\Closure $command_
      *
      * @throws \Components\Persistence_Exception
      */
-    public function executeLogged($query_)
+    public function invoke($command_)
     {
-      Log::debug('persistence/resource', $query_);
+      return $this->{self::$m_methodInvoke}($command_);
+    }
 
-      return $this->executeImpl($query_);
+    /**
+     * @param \Components\Command|\Callable|\Closure $command_
+     *
+     * @throws \Components\Persistence_Exception
+     */
+    public function invokeDebug($command_)
+    {
+      if($command_ instanceof Command)
+      {
+        Log::debug('persistence/resource', 'Invoking command [%s].', $command_);
+      }
+      else
+      {
+        $function=new \ReflectionFunction($command_);
+        Log::debug('persistence/resource', 'Invoking command [%s].', $function->getDocComment());
+      }
+
+      return $this->invokeImpl($command_);
+    }
+
+    /**
+     * @param string $statement_
+     *
+     * @throws \Components\Persistence_Exception
+     */
+    public function execute($statement_)
+    {
+      return $this->{self::$m_methodExecute}($statement_);
+    }
+
+    /**
+     * @param string $statement_
+     *
+     * @throws \Components\Persistence_Exception
+     */
+    public function executeDebug($statement_)
+    {
+      Log::debug('persistence/resource', $statement_);
+
+      return $this->executeImpl($statement_);
     }
 
     public function transactionBegin()
@@ -133,8 +220,15 @@ namespace Components;
 
 
     // IMPLEMENTATION
+    protected static $m_debugMode=0;
+    protected static $m_methodQuery=self::METHOD_QUERY;
+    protected static $m_methodInvoke=self::METHOD_INVOKE;
     protected static $m_methodExecute=self::METHOD_EXECUTE;
 
+    /**
+     * @var string
+     */
+    protected $m_cacheNamespace;
     /**
      * @var \Components\Uri
      */
@@ -146,13 +240,20 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    abstract protected function executeImpl($query_);
+    /**
+     * @param string $statement_
+     */
+    abstract protected function queryImpl($statement_);
+
+    /**
+     * @param \Components\Command|\Callable|\Closure $command_
+     */
+    abstract protected function invokeImpl($command_);
+
+    /**
+     * @param string $statement_
+     */
+    abstract protected function executeImpl($statement_);
     //--------------------------------------------------------------------------
   }
-
-
-  // FIXME Find a better place (without initializer methods) ...
-  Debug::addFlagListener(function() {
-    Persistence_Resource::logStatements(Debug::enabled(Persistence::LOG_STATEMENTS));
-  });
 ?>

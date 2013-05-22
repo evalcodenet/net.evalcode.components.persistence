@@ -24,6 +24,11 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
+    public function find($property_, $value_)
+    {
+      $this->m_backend->resource->find();
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Components\Object::hashCode()

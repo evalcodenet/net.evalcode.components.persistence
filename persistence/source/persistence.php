@@ -60,7 +60,7 @@ namespace Components;
     /**
      * @param string $name_
      *
-     * @return \Components\Persistence_Resource
+     * @return \Components\Persistence_Resource_Pool
      */
     public static function resource($name_)
     {

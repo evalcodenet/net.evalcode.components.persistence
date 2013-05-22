@@ -12,66 +12,106 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Persistence_Resource_Mongodb extends Persistence_Resource_Pool
+  class Persistence_Resource_Mongodb extends Persistence_Resource
   {
     // OVERRIDES/IMPLEMENTS
-    public function configure(array $resourceIdentifiers_)
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionExists()
+     */
+    public function collectionExists($name_)
     {
-      $this->m_resourceIdentifiers=$resourceIdentifiers_;
+      if(null===$this->m_collections)
+      {
+        if(false===($this->m_collections=Cache::get("{$this->m_cacheNamespace}/collections")))
+        {
+          $this->m_collections=$this->connection()->getCollectionNames();
 
-      $this->resource=$this;
-      $this->resourceReadOnly=$this;
+          Cache::set("{$this->m_cacheNamespace}/collections", $this->m_collections);
+        }
+      }
+
+      return in_array($name_, $this->m_collections);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionCreate()
+     */
+    public function collectionCreate($name_)
+    {
+      $this->invoke(Command_Mongodb::CREATE_COLLECTION($name_));
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionDrop()
+     */
+    public function collectionDrop($name_)
+    {
+      // FIXME Parameter scope ...
+      $this->invoke(function() {return array('drop'=>$name_);});
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::connection()
+     *
+     * @return \MongoDB
+     */
+    public function connection()
+    {
+      if(null===$this->m_database)
+      {
+        if($this->m_isolated)
+          $this->m_database=$this->driver()->selectDB($this->m_databaseNameIsolated);
+        else
+          $this->m_database=$this->driver()->selectDB($this->m_databaseName);
+      }
+
+      return $this->m_database;
     }
 
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::driver()
      *
-     * @return \MongoDB
+     * @return \MongoClient
      */
     public function driver()
     {
-
-    }
-
-/*
-    public function connection()
-    {
-      if(null===$this->m_connection)
+      if(null===$this->m_driver)
       {
-        $socket='127.0.0.1';
-        $dir=@opendir(sys_get_temp_dir());
-        while($entry=@readdir($dir))
+        if(Boolean::valueIsTrue($this->m_uri->getQueryParam('isolate')))
         {
-          if(preg_match('/mongo[-\D.sock]/', $entry))
-          {
-            $socket="/tmp/$entry";
-
-            break;
-          }
+          $this->m_isolated=true;
+          $this->m_uri->removeQueryParam('isolate');
         }
 
-        @closedir($dir);
+        if($this->m_uri->getHost())
+        {
+          $this->m_databaseName=$this->m_uri->getPathParam(0);
+          $this->m_connectionString=(string)$this->m_uri;
+          $this->m_connectionOptions=array();
+        }
+        else
+        {
+          $this->m_databaseName=$this->m_uri->getFragment();
+          $this->m_connectionString="mongodb://{$this->m_uri->getPath()}";
+          $this->m_connectionOptions=$this->m_uri->getQueryParams();
+        }
 
-        $this->m_connection=new \Mongo("mongodb://$socket");
+        if($this->m_isolated)
+          $this->m_databaseNameIsolated=$this->m_databaseName.'_'.Runtime::getInstanceNamespace();
+
+        if(0<(self::$m_debugMode&Persistence_Resource::DEBUG_LOG_STATEMENTS))
+          Log::debug('persistence/resource/mongodb', 'Connecting to database [%s].', $this);
+
+        $this->m_driver=new \MongoClient($this->m_connectionString, $this->m_connectionOptions);
       }
 
-      return $this->m_connection;
+      return $this->m_driver;
     }
-
-    public function db()
-    {
-      if(null===$this->m_db)
-        $this->m_db=$this->connection()->{'asia_tmogroup_components_'.Runtime::getInstanceNamespace()};
-
-      return $this->m_db;
-    }
-
-    public function collection($name_=null)
-    {
-      return $this->db()->$name_;
-    }
-*/
 
     /**
      * (non-PHPdoc)
@@ -110,16 +150,49 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private $m_resourceIdentifiers=array();
+    private $m_connectionOptions=array();
+    private $m_connectionString;
+    private $m_isolated=false;
+    private $m_collections;
+    private $m_databaseName;
+    private $m_databaseNameIsolated;
     /**
      * @var \MongoDB
      */
-    private $m_mongo;
-    /*
-    private static $m_instance;
-    private $m_connection;
-    private $m_db;
-    */
+    private $m_database;
+    /**
+     * @var \MongoClient
+     */
+    private $m_driver;
+    //-----
+
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::executeImpl()
+     */
+    protected function executeImpl($js_)
+    {
+      return $this->connection()->execute($js_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::queryImpl()
+     */
+    protected function queryImpl($statement_)
+    {
+
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::invokeImpl()
+     */
+    protected function invokeImpl($command_)
+    {
+      return $this->connection()->command($command_());
+    }
     //--------------------------------------------------------------------------
   }
 ?>

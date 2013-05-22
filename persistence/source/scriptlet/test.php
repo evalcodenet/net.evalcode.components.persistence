@@ -17,7 +17,7 @@ namespace Components;
     // ACCESSORS
     public function get()
     {
-      Persistence::resource('sql')->driver();
+      var_dump(Persistence::nosql('components/entity/foo'));
     }
 
     public function post()

@@ -14,18 +14,6 @@ namespace Components;
    */
   class Persistence_Backend_Mongodb extends Persistence_Backend
   {
-    // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Backend::view()
-     */
-    public function view($name_)
-    {
-      return new Persistence_View_Mongodb($this, $name_);
-    }
-    //--------------------------------------------------------------------------
-
-
     // STATIC ACCESSORS
     /**
      * Scans default locations for a mongodb server socket.
@@ -44,5 +32,21 @@ namespace Components;
       return null;
     }
     //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Backend::view()
+     */
+    public function view($name_)
+    {
+      if(false===$this->resource->collectionExists($name_))
+        $this->resource->collectionCreate($name_);
+
+      return new Persistence_View_Mongodb($this, $name_);
+    }
+    //--------------------------------------------------------------------------
+
   }
 ?>

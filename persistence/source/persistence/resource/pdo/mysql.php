@@ -41,17 +41,6 @@ namespace Components;
     // OVERRIDES/IMPLEMENTS
     /**
      * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::executeLogged()
-     */
-    public function executeLogged($query_)
-    {
-      Log::debug('persistence/resource/pdo/mysql', $query_);
-
-      return $this->executeImpl($query_);
-    }
-
-    /**
-     * (non-PHPdoc)
      * @see \Components\Object::hashCode()
      */
     public function hashCode()

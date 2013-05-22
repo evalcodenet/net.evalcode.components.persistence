@@ -62,27 +62,73 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::execute()
      */
-    public function execute($query_)
+    public function execute($statement_)
     {
-      return $this->resource->{parent::$m_methodExecute}($query_);
+      return $this->resource->{self::$m_methodExecute}($statement_);
     }
 
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::execute()
      */
-    public function executeLogged($query_)
+    public function executeDebug($statement_)
     {
-      return $this->resource->executeLogged($query_);
+      return $this->resource->executeDebug($statement_);
     }
 
     /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::execute()
+     */
+    public function query($statement_)
+    {
+      return $this->resource->{self::$m_methodQuery}($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::execute()
+     */
+    public function queryDebug($statement_)
+    {
+      return $this->resource->queryDebug($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::invoke()
+     */
+    public function invoke($callable_)
+    {
+      return $this->resource->{self::$m_methodInvoke}($callable_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::invokeDebug()
+     */
+    public function invokeDebug($callable_)
+    {
+      return $this->resource->invokeDebug($callable_);
+    }
+
+    /**
+     * (non-PHPdoc)
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::driver()
      */
     public function driver()
     {
       return $this->resource->driver();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::connection()
+     */
+    public function connection()
+    {
+      return $this->resource->connection();
     }
 
     /**
@@ -110,6 +156,33 @@ namespace Components;
     public function transactionRollback()
     {
       $this->resource->transactionRollback();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionExists()
+     */
+    public function collectionExists($name_)
+    {
+      return $this->resource->collectionExists($name_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionCreate()
+     */
+    public function collectionCreate($name_)
+    {
+      return $this->resource->collectionCreate($name_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::collectionDrop()
+     */
+    public function collectionDrop($name_)
+    {
+      return $this->resource->collectionDrop($name_);
     }
 
     /**
@@ -158,9 +231,27 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::executeImpl()
      */
-    protected function executeImpl($query_)
+    protected function executeImpl($statement_)
     {
-      return $this->resource->executeImpl($query_);
+      return $this->resource->executeImpl($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::executeImpl()
+     */
+    protected function queryImpl($statement_)
+    {
+      return $this->resource->queryImpl($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::executeImpl()
+     */
+    protected function invokeImpl($callable_)
+    {
+      return $this->resource->invokeImpl($callable_);
     }
     //--------------------------------------------------------------------------
   }

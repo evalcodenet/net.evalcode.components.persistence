@@ -54,11 +54,24 @@ namespace Components;
       if(!$type=Runtime_Classloader::lookup($name_))
       {
         throw new Persistence_Exception('persistence/backend', sprintf(
-          'Unable to resolve entity type for given name [name: %s].', $name_
+          'Unable to resolve entity type [entity: %s].', $name_
         ));
       }
 
-      if($annotation=Annotations::get($type)->getTypeAnnotation(Annotation_Collection::NAME))
+      $annotations=Annotations::get($type);
+
+      $name=null;
+      if($annotationName=$annotations->getTypeAnnotation(Annotation_Name::NAME))
+        $name=$annotationName->value;
+
+      if(!$name)
+      {
+        throw new Persistence_Exception('persistence/backend', sprintf(
+          'Unable to resolve entity collection name [entity: %s].', $name_
+        ));
+      }
+
+      if($annotation=$annotations->getTypeAnnotation(Annotation_Collection::NAME))
       {
         if($annotation->value && !($collection=Runtime_Classloader::lookup($annotation->value)))
         {
@@ -68,10 +81,10 @@ namespace Components;
           ));
         }
 
-        return new $collection($this->view($name_), $type);
+        return new $collection($this->view($name), $type);
       }
 
-      return new Entity_Collection($this->view($name_), $type);
+      return new Entity_Collection($this->view($name), $type);
     }
 
     abstract public function view($name_);

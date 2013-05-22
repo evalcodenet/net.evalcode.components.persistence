@@ -15,6 +15,35 @@ namespace Components;
   abstract class Persistence_Resource_Pdo extends Persistence_Resource
   {
     // OVERRIDES/IMPLEMENTS
+    public function collectionExists($name_)
+    {
+
+    }
+
+    public function collectionCreate($name_)
+    {
+
+    }
+
+    public function collectionDrop($name_)
+    {
+
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::connection()
+     *
+     * @return \PDO
+     */
+    public function connection()
+    {
+      if(null===$this->m_driver)
+        return $this->driver();
+
+      return $this->m_driver;
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::driver()
@@ -46,7 +75,7 @@ namespace Components;
 
         try
         {
-          if(Persistence_Resource::$logStatements)
+          if(0<(self::$m_debugMode&Persistence_Resource::DEBUG_LOG_STATEMENTS))
             Log::debug('persistence/resource/pdo', 'Connecting to database [%s;dbname=%s].', $dsn, $database);
 
           $this->m_driver=new \PDO("$dsn;dbname=$database", $username, $password, $this->driverOptions());
@@ -64,7 +93,7 @@ namespace Components;
         {
           try
           {
-            if(Persistence_Resource::$logStatements)
+            if(0<(self::$m_debugMode&Persistence_Resource::DEBUG_LOG_STATEMENTS))
               Log::debug('persistence/resource/pdo', 'Connecting to database [%s].', $dsn);
 
             $this->m_driver=new \PDO($dsn, $username, $password, $this->driverOptions());
@@ -78,6 +107,7 @@ namespace Components;
           $this->execute("USE $database;");
         }
 
+        // TODO (CSH) Can be added to driverOptions()?
         $this->m_driver->setAttribute(\PDO::ATTR_AUTOCOMMIT,
           $this->m_uri->hasQueryParam('autocommit')
             && Boolean::valueIsTrue($this->m_uri->getQueryParam('autocommit'))
@@ -101,9 +131,27 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::executeImpl()
      */
-    protected function executeImpl($query_)
+    protected function executeImpl($statement_)
     {
-      return $this->driver()->exec($query_);
+      return $this->driver()->exec($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::queryImpl()
+     */
+    protected function queryImpl($statement_)
+    {
+      return $this->driver()->query($statement_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::invokeImpl()
+     */
+    protected function invokeImpl($callable_)
+    {
+      return $this->driver()->query($callable_());
     }
 
     /**
