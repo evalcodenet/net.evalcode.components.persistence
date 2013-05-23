@@ -14,11 +14,23 @@ namespace Components;
    */
   class Persistence_View_Pdo implements Persistence_View
   {
+    // PROPERTIES
+    /**
+     * @var string
+     */
+    public $name;
+    /**
+     * @var \Components\Persistence_Resource_Pdo
+     */
+    public $resource;
+    //--------------------------------------------------------------------------
+
+
     // CONSTRUCTION
-    public function __construct(Persistence_Backend_Pdo $backend_, $name_)
+    public function __construct($name_, Persistence_Resource_Pdo $resource_)
     {
-      $this->m_backend=$backend_;
-      $this->m_name=$name_;
+      $this->name=$name_;
+      $this->resource=$resource_;
     }
     //--------------------------------------------------------------------------
 
@@ -30,7 +42,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return string_hash($this->m_name);
+      return string_hash($this->name);
     }
 
     /**
@@ -51,22 +63,13 @@ namespace Components;
      */
     public function __toString()
     {
-      return sprintf('%s@%s{name: %s, backend: %s}',
+      return sprintf('%s@%s{name: %s, resource: %s}',
         __CLASS__,
         $this->hashCode(),
-        $this->m_name,
-        $this->m_backend
+        $this->name,
+        $this->resource
       );
     }
-    //--------------------------------------------------------------------------
-
-
-    // IMPLEMENTATION
-    /**
-     * @var \Components\Persistence_Backend_Pdo
-     */
-    protected $m_backend;
-    protected $m_name;
     //--------------------------------------------------------------------------
   }
 ?>

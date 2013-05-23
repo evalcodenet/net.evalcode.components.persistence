@@ -17,7 +17,19 @@ namespace Components;
     // ACCESSORS
     public function get()
     {
-      var_dump(Persistence::nosql('components/entity/foo'));
+      $resource=Persistence::nosql()->view('foo');
+
+      $foo=new Entity_Foo();
+      $foo->name='Foo Bar';
+      $foo->createdAt=Date::now();
+      $resource->save($foo);
+
+      $foo=new Entity_Foo();
+      $foo->name='Foo Bar';
+      $foo->createdAt=Date::now();
+      $resource->save($foo);
+
+      var_dump($foo);
     }
 
     public function post()

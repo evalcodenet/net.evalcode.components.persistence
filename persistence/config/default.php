@@ -20,16 +20,23 @@ namespace Components;
   Persistence_Scriptlet_Test::serve('test');
 
 
-  Debug::addFlagListener(function() {
+  Debug::addFlagListener(function($active_, array $flags_)
+  {
+    if($active_)
+    {
+      $bits=array();
+      if(isset($flags_[Persistence::LOG_STATEMENTS]))
+        $bits[]=Persistence::BIT_LOG_STATEMENTS;
+      if(isset($flags_[Persistence::LOG_QUERIES]))
+        $bits[]=Persistence::BIT_LOG_QUERIES;
+      if(isset($flags_[Persistence::PROFILE]))
+        $bits[]=Persistence::BIT_PROFILE;
 
-    $mask=0;
-    if(Debug::enabled(Persistence::LOG_STATEMENTS))
-      $mask+=Persistence_Resource::DEBUG_LOG_STATEMENTS;
-    if(Debug::enabled(Persistence::LOG_QUERIES))
-      $mask+=Persistence_Resource::DEBUG_LOG_QUERIES;
-    if(Debug::enabled(Persistence::PROFILE))
-      $mask+=Persistence_Resource::DEBUG_PROFILE;
-
-    Persistence_Resource::debugMode($mask);
+      Persistence::$debugMode=Bitmask::getBitmaskForBits($bits);
+    }
+    else
+    {
+      Persistence::$debugMode=Persistence::BIT_NO_DEBUG;
+    }
   });
 ?>

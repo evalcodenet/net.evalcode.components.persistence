@@ -20,13 +20,23 @@ namespace Components;
      *
      * @var string
      */
-     const NAME='cache';
+    const NAME='cache';
     /**
      * Annotation_Cache
      *
      * @var string
      */
-     const TYPE=__CLASS__;
-     //--------------------------------------------------------------------------
+    const TYPE=__CLASS__;
+    //--------------------------------------------------------------------------
+
+
+    // PROPERTIES
+    /**
+     * Cache namespace.
+     *
+     * @var string
+     */
+    public $value='entity';
+    //--------------------------------------------------------------------------
   }
 ?>

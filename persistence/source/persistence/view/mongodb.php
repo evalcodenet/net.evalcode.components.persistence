@@ -14,28 +14,63 @@ namespace Components;
    */
   class Persistence_View_Mongodb implements Persistence_View
   {
+    // PROPERTIES
+    /**
+     * @var string
+     */
+    public $name;
+    /**
+     * @var \Components\Persistence_Resource_Mongodb
+     */
+    public $resource;
+    //--------------------------------------------------------------------------
+
+
     // CONSTRUCTION
-    public function __construct(Persistence_Backend_Mongodb $backend_, $name_)
+    public function __construct($name_, Persistence_Resource_Mongodb $resource_)
     {
-      $this->m_backend=$backend_;
-      $this->m_name=$name_;
+      $this->name=$name_;
+      $this->resource=$resource_;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // ACCESSORS/MUTATORS
+    public function save(Entity $entity_)
+    {
+      return $this->resource->save($entity_, $this->name);
+    }
+
+    public function drop()
+    {
+      return $this->resource->collectionDrop($this->name);
+    }
+
+    public function create()
+    {
+      return $this->resource->collectionCreate($this->name);
+    }
+
+    public function indexCreate($name_, $property_/*, $property1_... */)
+    {
+
+    }
+
+    public function indexDrop($name_)
+    {
+
     }
     //--------------------------------------------------------------------------
 
 
     // OVERRIDES/IMPLEMENTS
-    public function find($property_, $value_)
-    {
-      $this->m_backend->resource->find();
-    }
-
     /**
      * (non-PHPdoc)
      * @see \Components\Object::hashCode()
      */
     public function hashCode()
     {
-      return string_hash($this->m_name);
+      return string_hash($this->name);
     }
 
     /**
@@ -56,22 +91,13 @@ namespace Components;
      */
     public function __toString()
     {
-      return sprintf('%s@%s{name: %s, backend: %s}',
+      return sprintf('%s@%s{name: %s, resource: %s}',
         __CLASS__,
         $this->hashCode(),
-        $this->m_name,
-        $this->m_backend
+        $this->name,
+        $this->resource
       );
     }
-    //--------------------------------------------------------------------------
-
-
-    // IMPLEMENTATION
-    /**
-     * @var \Components\Persistence_Backend_Mongodb
-     */
-    protected $m_backend;
-    protected $m_name;
     //--------------------------------------------------------------------------
   }
 ?>

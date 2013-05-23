@@ -12,9 +12,38 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  class Persistence_Resource_Mongodb extends Persistence_Resource
+  class Persistence_Resource_Mongodb extends Persistence_Resource_Abstract
   {
+    // STATIC ACESSORS
+    /**
+     * Scans default locations for a mongodb server socket.
+     *
+     * @return string
+     */
+    public static function lookupSocket()
+    {
+      /* @var $path Io_Path */
+      foreach(Io::systemTmpPath() as $path)
+      {
+        if(preg_match('/mongo[-\D.sock]/', $path->getPath()))
+          return $path->getPath();
+      }
+
+      return null;
+    }
+    //--------------------------------------------------------------------------
+
+
     // OVERRIDES/IMPLEMENTS
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::view()
+     */
+    public function view($name_)
+    {
+      return new Persistence_View_Mongodb($name_, $this);
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::collectionExists()
@@ -23,11 +52,11 @@ namespace Components;
     {
       if(null===$this->m_collections)
       {
-        if(false===($this->m_collections=Cache::get("{$this->m_cacheNamespace}/collections")))
+        if(false===($this->m_collections=$this->cache('collection', 'names')))
         {
-          $this->m_collections=$this->connection()->getCollectionNames();
+          $this->m_collections=$this->execute("return db.getCollectionNames();");
 
-          Cache::set("{$this->m_cacheNamespace}/collections", $this->m_collections);
+          $this->cache('collection', 'names', $this->m_collections);
         }
       }
 
@@ -40,7 +69,17 @@ namespace Components;
      */
     public function collectionCreate($name_)
     {
-      $this->invoke(Command_Mongodb::CREATE_COLLECTION($name_));
+      $result=$this->execute("db.createCollection('$name_'); return db.getCollectionNames();");
+
+      if(isset($result['ok']) && 1===(int)$result['ok'])
+      {
+        $this->m_collections=$result['retval'];
+        $this->cache('collection', 'names', $this->m_collections);
+
+        return true;
+      }
+
+      return false;
     }
 
     /**
@@ -49,8 +88,17 @@ namespace Components;
      */
     public function collectionDrop($name_)
     {
-      // FIXME Parameter scope ...
-      $this->invoke(function() {return array('drop'=>$name_);});
+      $result=$this->execute("db.$name_.drop(); return db.getCollectionNames();");
+
+      if(isset($result['ok']) && 1===(int)$result['ok'])
+      {
+        $this->m_collections=$result['retval'];
+        $this->cache('collection', 'names', $this->m_collections);
+
+        return true;
+      }
+
+      return false;
     }
 
     /**
@@ -64,9 +112,9 @@ namespace Components;
       if(null===$this->m_database)
       {
         if($this->m_isolated)
-          $this->m_database=$this->driver()->selectDB($this->m_databaseNameIsolated);
+          $this->m_database=$this->driver()->{$this->m_databaseNameIsolated};
         else
-          $this->m_database=$this->driver()->selectDB($this->m_databaseName);
+          $this->m_database=$this->driver()->{$this->m_databaseName};
       }
 
       return $this->m_database;
@@ -104,7 +152,7 @@ namespace Components;
         if($this->m_isolated)
           $this->m_databaseNameIsolated=$this->m_databaseName.'_'.Runtime::getInstanceNamespace();
 
-        if(0<(self::$m_debugMode&Persistence_Resource::DEBUG_LOG_STATEMENTS))
+        if(0!==Persistence::$debugMode&Persistence::BIT_LOG_STATEMENTS)
           Log::debug('persistence/resource/mongodb', 'Connecting to database [%s].', $this);
 
         $this->m_driver=new \MongoClient($this->m_connectionString, $this->m_connectionOptions);
@@ -168,30 +216,36 @@ namespace Components;
 
 
     /**
+     * @param string $collection_
+     * @param array|scalar $properties_
+     */
+    protected function saveImpl($collection_, array $properties_)
+    {
+      $result=$this->connection()->$collection_->save($properties_);
+
+      if(isset($result['ok']) && 1===(int)$result['ok'])
+        return $properties_['_id']->{'$id'};
+
+      return false;
+    }
+
+    /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::executeImpl()
      */
-    protected function executeImpl($js_)
+    protected function executeImpl($statement_)
     {
-      return $this->connection()->execute($js_);
+      return $this->connection()->execute($statement_);
     }
 
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::queryImpl()
      */
-    protected function queryImpl($statement_)
+    protected function queryImpl(Query $query_)
     {
-
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::invokeImpl()
-     */
-    protected function invokeImpl($command_)
-    {
-      return $this->connection()->command($command_());
+      // FIXME Return true/false success status and deliver extended result via Query instance.
+      $query_->result($this->connection()->command($query_($this->connection())));
     }
     //--------------------------------------------------------------------------
   }

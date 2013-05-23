@@ -12,8 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  // TODO (CSH) Generalize to Resource_Connection, Resource_Connection_Pool etc.
-  class Persistence_Resource_Pool extends Persistence_Resource
+  class Persistence_Resource_Pool implements Persistence_Resource
   {
     // PROPERTIES
     /**
@@ -60,66 +59,47 @@ namespace Components;
     // OVRRIDES/IMPLEMENTS
     /**
      * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::save()
+     */
+    public function save(Entity $entity_)
+    {
+      return $this->resource->save($entity_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::query()
+     */
+    public function query(Query $query_)
+    {
+      return $this->resource->query($query_);
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \Components\Persistence_Resource::execute()
      */
     public function execute($statement_)
     {
-      return $this->resource->{self::$m_methodExecute}($statement_);
+      return $this->resource->execute($statement_);
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::execute()
+     * @see \Components\Persistence_Resource::collection()
      */
-    public function executeDebug($statement_)
+    public function collection($name_)
     {
-      return $this->resource->executeDebug($statement_);
+      return $this->resource->collection($name_);
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::execute()
+     * @see \Components\Persistence_Resource::view()
      */
-    public function query($statement_)
+    public function view($name_)
     {
-      return $this->resource->{self::$m_methodQuery}($statement_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::execute()
-     */
-    public function queryDebug($statement_)
-    {
-      return $this->resource->queryDebug($statement_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::invoke()
-     */
-    public function invoke($callable_)
-    {
-      return $this->resource->{self::$m_methodInvoke}($callable_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::invokeDebug()
-     */
-    public function invokeDebug($callable_)
-    {
-      return $this->resource->invokeDebug($callable_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::driver()
-     */
-    public function driver()
-    {
-      return $this->resource->driver();
+      return $this->resource->view($name_);
     }
 
     /**
@@ -129,6 +109,15 @@ namespace Components;
     public function connection()
     {
       return $this->resource->connection();
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::driver()
+     */
+    public function driver()
+    {
+      return $this->resource->driver();
     }
 
     /**
@@ -160,29 +149,11 @@ namespace Components;
 
     /**
      * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionExists()
+     * @see \Components\Persistence_Resource::isReadOnly()
      */
-    public function collectionExists($name_)
+    public function isReadOnly()
     {
-      return $this->resource->collectionExists($name_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionCreate()
-     */
-    public function collectionCreate($name_)
-    {
-      return $this->resource->collectionCreate($name_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionDrop()
-     */
-    public function collectionDrop($name_)
-    {
-      return $this->resource->collectionDrop($name_);
+      return 0===count($this->m_write);
     }
 
     /**
@@ -225,34 +196,6 @@ namespace Components;
     // IMPLEMENTATION
     private $m_read=array();
     private $m_write=array();
-    //-----
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::executeImpl()
-     */
-    protected function executeImpl($statement_)
-    {
-      return $this->resource->executeImpl($statement_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::executeImpl()
-     */
-    protected function queryImpl($statement_)
-    {
-      return $this->resource->queryImpl($statement_);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::executeImpl()
-     */
-    protected function invokeImpl($callable_)
-    {
-      return $this->resource->invokeImpl($callable_);
-    }
     //--------------------------------------------------------------------------
   }
 ?>

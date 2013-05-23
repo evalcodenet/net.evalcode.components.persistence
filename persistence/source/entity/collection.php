@@ -14,6 +14,11 @@ namespace Components;
    */
   class Entity_Collection implements Collection_Mutable
   {
+    // PREDEFINED PROPERTIES
+    const TYPE=__CLASS__;
+    //--------------------------------------------------------------------------
+
+
     // PROPERTIES
     /**
      * @var \Components\Persistence_View

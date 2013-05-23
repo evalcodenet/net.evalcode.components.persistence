@@ -11,9 +11,12 @@ namespace Components;
    * @subpackage persistence
    *
    * @author evalcode.net
+   *
+   * @property string name
+   * @property \Components\Persistence_Resource resource
    */
   interface Persistence_View extends Object
   {
-
+    function save(Entity $entity_);
   }
 ?>

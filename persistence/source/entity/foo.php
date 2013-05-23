@@ -26,6 +26,7 @@ namespace Components;
     public $id;
 
     /**
+     * @unique
      * @var string
      */
     public $name;

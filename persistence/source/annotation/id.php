@@ -20,13 +20,21 @@ namespace Components;
      *
      * @var string
      */
-     const NAME='id';
+    const NAME='id';
     /**
      * Annotation_Id
      *
      * @var string
      */
-     const TYPE=__CLASS__;
-     //--------------------------------------------------------------------------
+    const TYPE=__CLASS__;
+    //--------------------------------------------------------------------------
+
+
+    // PROPERTIES
+    /**
+     * @var boolean
+     */
+    public $auto=true;
+    //--------------------------------------------------------------------------
   }
 ?>
