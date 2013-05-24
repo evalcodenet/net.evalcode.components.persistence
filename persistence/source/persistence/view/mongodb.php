@@ -16,39 +16,34 @@ namespace Components;
   {
     // PROPERTIES
     /**
-     * @var string
-     */
-    public $name;
-    /**
      * @var \Components\Persistence_Resource_Mongodb
      */
     public $resource;
+    /**
+     * @var \Components\Persistence_Properties
+     */
+    public $properties;
     //--------------------------------------------------------------------------
 
 
     // CONSTRUCTION
-    public function __construct($name_, Persistence_Resource_Mongodb $resource_)
+    public function __construct(Persistence_Resource_Mongodb $resource_, Persistence_Properties $properties_)
     {
-      $this->name=$name_;
       $this->resource=$resource_;
+      $this->properties=$properties_;
     }
     //--------------------------------------------------------------------------
 
 
     // ACCESSORS/MUTATORS
-    public function save(Entity $entity_)
+    public function create()
     {
-      return $this->resource->save($entity_, $this->name);
+      return $this->resource->collectionCreate($this->properties->collectionName);
     }
 
     public function drop()
     {
-      return $this->resource->collectionDrop($this->name);
-    }
-
-    public function create()
-    {
-      return $this->resource->collectionCreate($this->name);
+      return $this->resource->collectionDrop($this->properties->collectionName);
     }
 
     public function indexCreate($name_, $property_/*, $property1_... */)
@@ -66,11 +61,72 @@ namespace Components;
     // OVERRIDES/IMPLEMENTS
     /**
      * (non-PHPdoc)
+     * @see \Components\Persistence_View::findByPk()
+     */
+    public function findByPk($primaryKey_)
+    {
+      return $this->resource->find(
+        $this->properties->collectionName,
+        $this->properties->collectionPrimaryKey,
+        $primaryKey_
+      );
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_View::save()
+     */
+    public function save(array $record_)
+    {
+      return $this->resource->save(
+        $this->properties->collectionName,
+        $this->properties->collectionPrimaryKey,
+        $record_
+      );
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_View::remove()
+     */
+    public function remove($primaryKey_)
+    {
+      return $this->resource->remove(
+        $this->properties->collectionName,
+        $this->properties->collectionPrimaryKey,
+        $primaryKey_
+      );
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_View::collection()
+     */
+    public function collection()
+    {
+      $collectionType=$this->properties->collectionType;
+
+      return new $collectionType($this, $this->properties);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_View::getIterator()
+     */
+    public function getIterator()
+    {
+      $collectionType=$this->properties->collectionType;
+
+      return new $collectionType($this, $this->properties);
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \Components\Object::hashCode()
      */
     public function hashCode()
     {
-      return string_hash($this->name);
+      return string_hash($this->properties->collectionName);
     }
 
     /**
@@ -91,10 +147,10 @@ namespace Components;
      */
     public function __toString()
     {
-      return sprintf('%s@%s{name: %s, resource: %s}',
+      return sprintf('%s@%s{properties: %s, resource: %s}',
         __CLASS__,
         $this->hashCode(),
-        $this->name,
+        $this->properties,
         $this->resource
       );
     }

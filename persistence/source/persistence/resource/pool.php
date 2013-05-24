@@ -61,9 +61,27 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::save()
      */
-    public function save(Entity $entity_)
+    public function save($table_, $primaryKey_, array $record_)
     {
-      return $this->resource->save($entity_);
+      return $this->resource->save($table_, $primaryKey_, $record_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::find()
+     */
+    public function find($table_, $property_, $value_)
+    {
+      return $this->resource->find($table_, $property_, $value_);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::remove()
+     */
+    public function remove($table_, $property_, $value_)
+    {
+      return $this->resource->remove($table_, $property_, $value_);
     }
 
     /**
@@ -97,9 +115,9 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::view()
      */
-    public function view($name_)
+    public function view($name_, Persistence_Properties $properties_=null)
     {
-      return $this->resource->view($name_);
+      return $this->resource->view($name_, $properties_);
     }
 
     /**

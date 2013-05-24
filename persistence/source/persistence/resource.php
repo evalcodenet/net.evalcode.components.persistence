@@ -16,11 +16,30 @@ namespace Components;
   {
     // ACCESSORS/MUTATORS
     /**
-     * @param \Components\Entity $entity_
+     * @param string $table_
+     * @param array|scalar $record_
+     *
+     * @return null|scalar
+     */
+    function save($table_, $primaryKey_, array $record_);
+
+    /**
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     *
+     * @return null|array|scalar
+     */
+    function find($table_, $property_, $value_);
+
+    /**
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
      *
      * @return boolean
      */
-    function save(Entity $entity_);
+    function remove($table_, $property_, $value_);
 
     /**
      * @param \Components\Query $query_
@@ -33,20 +52,12 @@ namespace Components;
     function execute($statement_);
 
     /**
-     * @param string $entity_
-     *
-     * @return \Components\Entity_Collection
-     *
-     * @throws \Components\Persistence_Exception
-     */
-    function collection($name_);
-
-    /**
      * @param string $name_
+     * @param \Components\Persistence_Properties $properties_
      *
      * @return \Components\Persistence_View
      */
-    function view($name_);
+    function view($name_, Persistence_Properties $properties_=null);
 
     /**
      * Return underlying connection or resource.

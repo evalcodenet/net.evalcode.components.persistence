@@ -12,7 +12,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  interface Entity extends Object, Serializable
+  interface Entity extends Object, Serializable_Php
   {
 
   }

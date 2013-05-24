@@ -8,7 +8,6 @@ namespace Components;
     Annotation_Cache::NAME=>Annotation_Cache::TYPE,
     Annotation_Collection::NAME=>Annotation_Collection::TYPE,
     Annotation_Id::NAME=>Annotation_Id::TYPE,
-    Annotation_Resource::NAME=>Annotation_Resource::TYPE,
     Annotation_Transient::NAME=>Annotation_Transient::TYPE
   ));
 
@@ -17,6 +16,7 @@ namespace Components;
   Resource_Type::registerResourceType('mongodb', Persistence_Resource_Mongodb::type());
 
 
+  Persistence_Resource_Schema::serve('schema');
   Persistence_Scriptlet_Test::serve('test');
 
 

@@ -31,7 +31,6 @@ namespace Components;
     {
       $this->m_uri=$uri_;
       $this->m_cacheNamespace='persistence/resource/'.md5($uri_->hashCode());
-      $this->m_objectMapper=new Object_Mapper();
     }
     //--------------------------------------------------------------------------
 
@@ -52,26 +51,63 @@ namespace Components;
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::save()
      */
-    public function save(Entity $entity_, $collection_=null)
+    public function save($table_, $primaryKey_, array $record_)
     {
-      $type=get_class($entity_);
-      $typeProperties=Entity_Properties::forType($type);
-
-      $properties=$this->m_objectMapper->mapObjectOfType($entity_, $type);
       $result=$this->{self::$m_methodSave[Persistence::$debugMode&Persistence::BIT_NO_DEBUG]}(
-        $typeProperties->collectionName, $properties
+        $table_, $primaryKey_, $record_
       );
 
-      if(false===$result)
-        return false;
+      if(null===$result)
+        return null;
 
-      if($typeProperties->autoIncrement)
-        $entity_->{$typeProperties->primaryKey}=$result;
+      $record_[$primaryKey_]=$result;
 
-      if($typeProperties->cache)
-        $this->cache($typeProperties->cacheNamespace, $entity_->{$typeProperties->primaryKey}, $properties);
+      $this->addToResultsCache($table_, $primaryKey_, $result, $record_);
 
-      return true;
+      return $result;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::find()
+     */
+    public function find($table_, $property_, $value_)
+    {
+      if($record=$this->loadFromResultsCache($table_, $property_, $value_))
+        return $record;
+
+      $record=$this->{self::$m_methodFind[Persistence::$debugMode&Persistence::BIT_NO_DEBUG]}(
+        $table_, $property_, $value_
+      );
+
+      if($record)
+      {
+        $this->addToResultsCache($table_, $property_, $value_, $record);
+
+        return $record;
+      }
+
+      return null;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::remove()
+     */
+    public function remove($table_, $property_, $value_)
+    {
+      $result=$this->{self::$m_methodRemove[Persistence::$debugMode&Persistence::BIT_NO_DEBUG]}(
+        $table_, $property_, $value_
+      );
+
+      if($result)
+      {
+        $this->removeFromResultsCache($table_, $property_, $value_);
+
+        return true;
+      }
+
+      return false;
     }
 
     /**
@@ -121,21 +157,6 @@ namespace Components;
     }
 
     /**
-     * @param string $entity_
-     *
-     * @return \Components\Entity_Collection
-     *
-     * @throws \Components\Persistence_Exception
-     */
-    public function collection($name_)
-    {
-      $typeProperties=Entity_Properties::forName($name_);
-      $collectionType=$typeProperties->collectionType;
-
-      return new $collectionType($this->view($typeProperties->collectionName), $typeProperties->type);
-    }
-
-    /**
      * @return boolean
      */
     public function isReadOnly()
@@ -158,7 +179,7 @@ namespace Components;
      *
      * @return mixed
      */
-    public function debugSave($collection_, array $properties_)
+    public function debugSave($table_, $primaryKey_, array $record_)
     {
       if(Persistence::$debugMode&Persistence::BIT_PROFILE)
       {
@@ -166,19 +187,19 @@ namespace Components;
       }
       else
       {
-        Log::debug('persistence/resource', 'Save [collection: %s, properties: %s].',
-          $collection_,
-          HashMap::valueOf($properties_)
+        Log::debug('persistence/resource', 'Save [table: %s, record: %s].',
+          $table_,
+          HashMap::valueOf($record_)
         );
 
-        return $this->saveImpl($collection_, $properties_);
+        return $this->saveImpl($table_, $primaryKey_, $record_);
       }
 
-      $result=$this->saveImpl($collection_, $properties_);
-      Log::debug('persistence/resource', 'Save completed in %.5fs [collection: %s, properties; %s].',
+      $result=$this->saveImpl($table_, $primaryKey_, $record_);
+      Log::debug('persistence/resource', 'Save completed in %.5fs [table: %s, record; %s].',
         microtime(true)-$time,
-        $collection_,
-        HashMap::valueOf($properties_)
+        $table_,
+        HashMap::valueOf($record_)
       );
 
       return $result;
@@ -239,21 +260,31 @@ namespace Components;
       0=>'debugQuery',
       1=>'queryImpl'
     );
+    protected static $m_methodFind=array(
+      0=>'debugFind',
+      1=>'findImpl'
+    );
     protected static $m_methodSave=array(
       0=>'debugSave',
       1=>'saveImpl'
     );
+    protected static $m_methodRemove=array(
+      0=>'debugRemov',
+      1=>'removeImpl'
+    );
+    /**
+     * @var \Components\Object_Mapper
+     */
+    protected static $m_objectMapper;
 
     private static $m_cache=array();
+    private static $m_cacheResults=array();
+    private static $m_cacheFlushed=false;
 
     /**
      * @var \Components\Uri
      */
     protected $m_uri;
-    /**
-     * @var \Components\Object_Mapper
-     */
-    protected $m_objectMapper;
 
     /**
      * @var string
@@ -267,7 +298,46 @@ namespace Components;
 
 
     /**
-     * Private cache.
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     *
+     * @return array|scalar
+     */
+    abstract protected function findImpl($table_, $property_, $value_);
+
+    /**
+     * @param string $table_
+     * @param string $primaryKey_
+     * @param array|scalar $record_
+     *
+     * @return scalar
+     */
+    abstract protected function saveImpl($table_, $primaryKey_, array $record_);
+
+    /**
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     *
+     * @return boolean
+     */
+    abstract protected function removeImpl($table_, $property_, $value_);
+
+    /**
+     * @param \Components\Query $query_
+     */
+    abstract protected function queryImpl(Query $query_);
+
+    /**
+     * @param string $statement_
+     */
+    abstract protected function executeImpl($statement_);
+
+
+    // INTERNAL QUERY, 2ND & 3RD LEVEL CACHE
+    /**
+     * Internal resource & properties cache.
      *
      * @param string $namespace_
      * @param string $key_
@@ -290,26 +360,74 @@ namespace Components;
       }
 
       self::$m_cache[$namespace][$key_]=$value_;
-      Cache::set($namespace, self::$m_cache[$namespace], $ttl_);
 
       return $value_;
     }
 
     /**
-     * @param string $collection_
-     * @param array|scalar $properties_
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     * @param array|scalar $record_
      */
-    abstract protected function saveImpl($collection_, array $properties_);
+    protected function addToResultsCache($table_, $property_, $value_, array $record_)
+    {
+      self::$m_cacheResults[$table_][$property_][$value_]=$record_;
+    }
 
     /**
-     * @param \Components\Query $query_
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     *
+     * @return false|array|scalar $record_
      */
-    abstract protected function queryImpl(Query $query_);
+    protected function loadFromResultsCache($table_, $property_, $value_)
+    {
+      if(false===isset(self::$m_cacheResults[$table_]))
+        self::$m_cacheResults[$table_]=Cache::get("persistence/resource/results/$table_");
+
+      if(false===isset(self::$m_cacheResults[$table_][$property_][$value_]))
+        return false;
+
+      return self::$m_cacheResults[$table_][$property_][$value_];
+    }
 
     /**
-     * @param string $statement_
+     * @param string $table_
+     * @param string $property_
+     * @param scalar $value_
+     * @param array|scalar $record_
      */
-    abstract protected function executeImpl($statement_);
+    protected function removeFromResultsCache($table_, $property_, $value_)
+    {
+      if(isset(self::$m_cacheResults[$table_][$property_][$value_]))
+        self::$m_cacheResults[$table_][$property_][$value_]=null;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // DESTRUCTION
+    // FIXME Bad ... but maybe cool
+    public function __destruct()
+    {
+      if(false===self::$m_cacheFlushed)
+      {
+        foreach(self::$m_cache as $namespace=>$bucket)
+        {
+          Log::debug('persistence/resource', 'Flushing resource cache bucket %s.', $namespace);
+          Cache::set($namespace, $bucket);
+        }
+
+        foreach(self::$m_cacheResults as $table=>$results)
+        {
+          Log::debug('persistence/resource', 'Flushing cache bucket persistence/resource/results/%s.', $table);
+          Cache::set("persistence/resource/results/$table", $results);
+        }
+
+        self::$m_cacheFlushed=true;
+      }
+    }
     //--------------------------------------------------------------------------
   }
 ?>

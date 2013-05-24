@@ -5,15 +5,21 @@ namespace Components;
 
 
   /**
-   * Entity_Abstract
+   * Entity_Default
    *
    * @package net.evalcode.components
    * @subpackage persistence.entity
    *
    * @author evalcode.net
    */
-  class Entity_Abstract implements Entity
+  class Entity_Default implements Entity
   {
+    // PREDEFINED PROPERTIES
+    const TYPE=__CLASS__;
+    const PRIMARY_KEY_DEFAULT='id';
+    //--------------------------------------------------------------------------
+
+
     // PROPERTIES
     /**
      * @transient
@@ -25,6 +31,32 @@ namespace Components;
 
 
     // OVERRIDES
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Serializable_Php::__sleep()
+     */
+    public function __sleep()
+    {
+      if(null===self::$m_mapper)
+        self::$m_mapper=new Object_Mapper();
+
+      $this->m_properties=self::$m_mapper->dehydrate($this);
+
+      return array('m_properties');
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Serializable_Php::__wakeup()
+     */
+    public function __wakeup()
+    {
+      if(null===self::$m_mapper)
+        self::$m_mapper=new Object_Mapper();
+
+      self::$m_mapper->hydrate($this, $this->m_properties);
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Components\Object::hashCode()
@@ -63,6 +95,15 @@ namespace Components;
     {
       return 1;
     }
+    //--------------------------------------------------------------------------
+
+
+    // IMPLEMENTATION
+    /**
+     * @transient
+     * @var \Components\Object_Mapper
+     */
+    private static $m_mapper;
     //--------------------------------------------------------------------------
   }
 ?>

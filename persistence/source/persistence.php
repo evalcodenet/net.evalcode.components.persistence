@@ -46,7 +46,7 @@ namespace Components;
       if(0===count($args_))
         return self::$m_resources[$name_];
 
-      return self::$m_resources[$name_]->collection(array_shift($args_));
+      return self::$m_resources[$name_]->view(array_shift($args_))->collection();
     }
 
     /**
@@ -90,13 +90,16 @@ namespace Components;
      *
      * @return \Components\Persistence_View
      */
-    public static function view($name_)
+    public static function view($name_, Persistence_Properties $properties_=null)
     {
       $urn=Urn::valueOf($name_);
+      if('urn'===$urn->getScheme())
+        throw new Exception_IllegalArgument('components/persistence', 'Argument must be formatted like: resource:entity/name.');
+
       if(false===isset(self::$m_resources[$urn->getScheme()]))
         static::resource($urn->getScheme());
 
-      return self::$m_resources[$urn->getScheme()]->view($urn->getNamespace());
+      return self::$m_resources[$urn->getScheme()]->view($urn->getNamespace(), $properties_);
     }
 
     /**
@@ -104,13 +107,16 @@ namespace Components;
      *
      * @return \Components\Entity_Collection
      */
-    public static function collection($name_)
+    public static function collection($name_, Persistence_Properties $properties_=null)
     {
       $urn=Urn::valueOf($name_);
+      if('urn'===$urn->getScheme())
+        throw new Exception_IllegalArgument('components/persistence', 'Argument must be formatted like: resource:entity/name.');
+
       if(false===isset(self::$m_resources[$urn->getScheme()]))
         static::resource($urn->getScheme());
 
-      return self::$m_resources[$urn->getScheme()]->collection($urn->getNamespace());
+      return self::$m_resources[$urn->getScheme()]->view($urn->getNamespace(), $properties_)->collection();
     }
     //--------------------------------------------------------------------------
 

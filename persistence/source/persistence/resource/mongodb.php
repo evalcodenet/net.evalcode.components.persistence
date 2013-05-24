@@ -34,20 +34,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::view()
-     */
-    public function view($name_)
-    {
-      return new Persistence_View_Mongodb($name_, $this);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionExists()
-     */
+    // ACCESSORS/MUTATORS
     public function collectionExists($name_)
     {
       if(null===$this->m_collections)
@@ -63,10 +50,6 @@ namespace Components;
       return in_array($name_, $this->m_collections);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionCreate()
-     */
     public function collectionCreate($name_)
     {
       $result=$this->execute("db.createCollection('$name_'); return db.getCollectionNames();");
@@ -82,10 +65,6 @@ namespace Components;
       return false;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::collectionDrop()
-     */
     public function collectionDrop($name_)
     {
       $result=$this->execute("db.$name_.drop(); return db.getCollectionNames();");
@@ -99,6 +78,25 @@ namespace Components;
       }
 
       return false;
+    }
+    //--------------------------------------------------------------------------
+
+
+    // OVERRIDES/IMPLEMENTS
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource::view()
+     *
+     * @return \Components\Persistence_View_Mongodb
+     */
+    public function view($name_, Persistence_Properties $properties_=null)
+    {
+      if(null===$properties_)
+        $properties_=Persistence_Properties::forEntityName($name_);
+      if(null===$properties_)
+        $properties_=Persistence_Properties::generic($name_);
+
+      return new Persistence_View_Mongodb($this, $properties_);
     }
 
     /**
@@ -216,17 +214,39 @@ namespace Components;
 
 
     /**
-     * @param string $collection_
-     * @param array|scalar $properties_
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource_Abstract::findImpl()
      */
-    protected function saveImpl($collection_, array $properties_)
+    protected function findImpl($table_, $property_, $value_)
     {
-      $result=$this->connection()->$collection_->save($properties_);
+
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource_Abstract::saveImpl()
+     */
+    protected function saveImpl($table_, $primaryKey_, array $record_)
+    {
+      // Trick the driver to return the new id without manipulating the original array.
+      $properties=&$record_;
+      $data=$record_;
+
+      $result=$this->connection()->$table_->save($data);
 
       if(isset($result['ok']) && 1===(int)$result['ok'])
-        return $properties_['_id']->{'$id'};
+        return $data['_id']->{'$id'};
 
       return false;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource_Abstract::removeImpl()
+     */
+    protected function removeImpl($table_, $property_, $value_)
+    {
+
     }
 
     /**

@@ -32,11 +32,13 @@ namespace Components;
 
     // PROPERTIES
     /**
-     * Cache namespace.
-     *
      * @var string
      */
-    public $value='entity';
+    public $namespace='persistence/cache/entity';
+    /**
+     * @var integer
+     */
+    public $ttl=0;
     //--------------------------------------------------------------------------
   }
 ?>

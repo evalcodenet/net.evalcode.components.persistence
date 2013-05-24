@@ -13,15 +13,13 @@ namespace Components;
    * @author evalcode.net
    *
    * @name foo
-   * @cache entities
-   * @collection components/entity/collection/foo
    */
-  class Entity_Foo extends Entity_Abstract
+  class Entity_Foo extends Entity_Default
   {
     // PROPERTIES
     /**
      * @id
-     * @var integer
+     * @var string
      */
     public $id;
 

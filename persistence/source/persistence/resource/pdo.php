@@ -18,10 +18,22 @@ namespace Components;
     /**
      * (non-PHPdoc)
      * @see \Components\Persistence_Resource::view()
+     *
+     * @return \Components\Persistence_View_Pdo
      */
-    public function view($name_)
+    public function view($name_, Persistence_Properties $properties_=null)
     {
-      return new Persistence_View_Pdo($name_, $this);
+      if(null===$properties_)
+        $properties_=Persistence_Properties::forEntityName($name_);
+
+      if(null===$properties_)
+      {
+        Log::debug('persistence/resource/pdo', 'Given argument is not a valid entity name. Continuing with generic properties [%s].', $name_);
+
+        $properties_=Persistence_Properties::generic($name_);
+      }
+
+      return new Persistence_View_Pdo($this, $properties_);
     }
 
     /**
@@ -110,6 +122,40 @@ namespace Components;
 
       return $this->m_driver;
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::hashCode()
+     */
+    public function hashCode()
+    {
+      return object_hash($this);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::equals()
+     */
+    public function equals($object_)
+    {
+      if($object_ instanceof self)
+        return $this->hashCode()===$object_->hashCode();
+
+      return false;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Object::__toString()
+     */
+    public function __toString()
+    {
+      return sprintf('%s@%s{uri: %s}',
+        get_class($this),
+        $this->hashCode(),
+        $this->m_uri
+      );
+    }
     //--------------------------------------------------------------------------
 
 
@@ -123,9 +169,27 @@ namespace Components;
 
     /**
      * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::saveImpl()
+     * @see \Components\Persistence_Resource_Abstract::findImpl()
      */
-    protected function saveImpl($collection_, array $properties_)
+    protected function findImpl($table_, $property_, $value_)
+    {
+
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource_Abstract::saveImpl()
+     */
+    protected function saveImpl($table_, $primaryKey_, array $record_)
+    {
+
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Components\Persistence_Resource_Abstract::removeImpl()
+     */
+    protected function removeImpl($table_, $property_, $value_)
     {
 
     }
