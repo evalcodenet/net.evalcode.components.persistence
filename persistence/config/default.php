@@ -17,7 +17,6 @@ namespace Components;
 
 
   Persistence_Resource_Schema::serve('schema');
-  Persistence_Scriptlet_Test::serve('test');
 
 
   Debug::addFlagListener(function($active_, array $flags_)

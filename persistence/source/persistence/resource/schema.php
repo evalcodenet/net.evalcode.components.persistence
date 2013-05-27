@@ -44,6 +44,7 @@ namespace Components;
       $name=$properties->collectionName;
       $primaryKey=$properties->collectionPrimaryKey;
 
+
       // TODO Migrate schema ...
     }
     //--------------------------------------------------------------------------

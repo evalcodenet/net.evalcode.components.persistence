@@ -101,12 +101,18 @@ namespace Components;
 
 
     // IMPLEMENTATION
+    /**
+     * @var array|\Components\Persistence_Properties
+     */
     private static $m_instance=array();
+    /**
+     * @var array|string
+     */
     private static $m_mapEntityTypeByEntityName=array();
     //-----
 
 
-    private function initialize()
+    protected function initialize()
     {
       $a=Annotations::get($this->entityType);
 
