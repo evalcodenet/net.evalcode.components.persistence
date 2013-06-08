@@ -23,7 +23,7 @@ namespace Components;
     public static function lookupSocket()
     {
       /* @var $path Io_Path */
-      foreach(Io::tmpPathNameSystem() as $path)
+      foreach(Io::tmpPathSystem() as $path)
       {
         if(preg_match('/mongo[-\D.sock]/', $path->getPath()))
           return $path->getPath();
