@@ -24,9 +24,9 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    public function __construct($name_, $value_, array $options_=array())
+    public function __construct($key_, $name_, $value_, array $options_=array())
     {
-      parent::__construct($name_);
+      parent::__construct($key_, $name_);
 
       $this->m_value=$value_;
       $this->m_options=$options_;
