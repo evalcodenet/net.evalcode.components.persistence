@@ -36,9 +36,7 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    /**
-    * (non-PHPdoc)
-    * @see \Components\Persistence_View::findByPk()
+    /**    * @see \Components\Persistence_View::findByPk() \Components\Persistence_View::findByPk()
     */
     public function findByPk($primaryKey_)
     {
@@ -49,18 +47,14 @@ namespace Components;
       );
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_View::save()
+    /**     * @see \Components\Persistence_View::save() \Components\Persistence_View::save()
      */
     public function save(array $record_)
     {
       return $this->resource->save($this->properties->collectionName, $record_);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_View::remove()
+    /**     * @see \Components\Persistence_View::remove() \Components\Persistence_View::remove()
      */
     public function remove($primaryKey_)
     {
@@ -71,9 +65,7 @@ namespace Components;
       );
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_View::collection()
+    /**     * @see \Components\Persistence_View::collection() \Components\Persistence_View::collection()
      */
     public function collection()
     {
@@ -82,9 +74,7 @@ namespace Components;
       return new $collectionType($this, $this->properties);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_View::getIterator()
+    /**     * @see \Components\Persistence_View::getIterator() \Components\Persistence_View::getIterator()
      */
     public function getIterator()
     {
@@ -93,18 +83,14 @@ namespace Components;
       return new $collectionType($this, $this->properties);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::hashCode()
+    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return string_hash($this->properties->collectionName);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::equals()
+    /**     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -114,9 +100,7 @@ namespace Components;
       return false;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::__toString()
+    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {

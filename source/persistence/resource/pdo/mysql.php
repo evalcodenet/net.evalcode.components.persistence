@@ -39,18 +39,14 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::hashCode()
+    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::equals()
+    /**     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -60,9 +56,7 @@ namespace Components;
       return false;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::__toString()
+    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
@@ -76,18 +70,14 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource_Pdo::createDatabase()
+    /**     * @see \Components\Persistence_Resource_Pdo::createDatabase() \Components\Persistence_Resource_Pdo::createDatabase()
      */
     protected function createDatabase($database_, $username_)
     {
       $this->execute("CREATE DATABASE `{$database_}` DEFAULT CHARACTER SET '{$this->charset}' COLLATE '{$this->collation}'; GRANT ALL PRIVILEGES ON `{$database_}`.* TO '{$username_}'@'127.0.0.1'; FLUSH PRIVILEGES;");
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource_Pdo::driverOptions()
+    /**     * @see \Components\Persistence_Resource_Pdo::driverOptions() \Components\Persistence_Resource_Pdo::driverOptions()
      */
     protected function driverOptions()
     {

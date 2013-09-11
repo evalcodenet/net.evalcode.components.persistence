@@ -35,9 +35,7 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Callable::__invoke()
+    /**     * @see \Components\Callable::__invoke() \Components\Callable::__invoke()
      */
     public function __invoke()
     {
@@ -57,9 +55,7 @@ namespace Components;
       return isset($this->m_result['ok']) && 1===(int)$this->m_result['ok'];
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Enumeration::__toString()
+    /**     * @see \Components\Enumeration::__toString() \Components\Enumeration::__toString()
      */
     public function __toString()
     {

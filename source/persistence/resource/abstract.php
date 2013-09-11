@@ -47,9 +47,7 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::save()
+    /**     * @see \Components\Persistence_Resource::save() \Components\Persistence_Resource::save()
      */
     public function save($table_, $primaryKey_, array $record_)
     {
@@ -67,9 +65,7 @@ namespace Components;
       return $result;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::find()
+    /**     * @see \Components\Persistence_Resource::find() \Components\Persistence_Resource::find()
      */
     public function find($table_, $property_, $value_)
     {
@@ -90,9 +86,7 @@ namespace Components;
       return null;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::remove()
+    /**     * @see \Components\Persistence_Resource::remove() \Components\Persistence_Resource::remove()
      */
     public function remove($table_, $property_, $value_)
     {
@@ -110,9 +104,7 @@ namespace Components;
       return false;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::query()
+    /**     * @see \Components\Persistence_Resource::query() \Components\Persistence_Resource::query()
      */
     public function query(Query $query_)
     {
@@ -129,27 +121,21 @@ namespace Components;
       return $this->{self::$m_methodExecute[Persistence::$debugMode&Persistence::BIT_NO_DEBUG]}($statement_);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::transactionBegin()
+    /**     * @see \Components\Persistence_Resource::transactionBegin() \Components\Persistence_Resource::transactionBegin()
      */
     public function transactionBegin()
     {
       throw new Persistence_Exception('persistence/resource', 'Transactions are not supported.');
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::transactionCommit()
+    /**     * @see \Components\Persistence_Resource::transactionCommit() \Components\Persistence_Resource::transactionCommit()
      */
     public function transactionCommit()
     {
       throw new Persistence_Exception('persistence/resource', 'Transactions are not supported.');
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Persistence_Resource::transactionRollback()
+    /**     * @see \Components\Persistence_Resource::transactionRollback() \Components\Persistence_Resource::transactionRollback()
      */
     public function transactionRollback()
     {

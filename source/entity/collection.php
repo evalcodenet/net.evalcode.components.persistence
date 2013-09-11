@@ -79,36 +79,28 @@ namespace Components;
 
 
     // OVERRIDES/IMPLEMENTS
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection::isEmpty()
+    /**     * @see \Components\Collection::isEmpty() \Components\Collection::isEmpty()
      */
     public function isEmpty()
     {
       return 0===$this->view->count();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Countable::count()
+    /**     * @see \Components\Countable::count() \Components\Countable::count()
      */
     public function count()
     {
       return $this->view->count();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::clear()
+    /**     * @see \Components\Collection_Mutable::clear() \Components\Collection_Mutable::clear()
      */
     public function clear()
     {
       return $this->view->clear();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::add()
+    /**     * @see \Components\Collection_Mutable::add() \Components\Collection_Mutable::add()
      *
      * @param \Components\Entity $element_
      */
@@ -117,18 +109,14 @@ namespace Components;
       return $this->save($element_);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::addAll()
+    /**     * @see \Components\Collection_Mutable::addAll() \Components\Collection_Mutable::addAll()
      */
     public function addAll(Collection $collection_)
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::remove()
+    /**     * @see \Components\Collection_Mutable::remove() \Components\Collection_Mutable::remove()
      *
      * @param \Components\Entity $element_
      */
@@ -149,126 +137,98 @@ namespace Components;
       return false;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::removeAll()
+    /**     * @see \Components\Collection_Mutable::removeAll() \Components\Collection_Mutable::removeAll()
      */
     public function removeAll(Collection $collection_)
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection_Mutable::retainAll()
+    /**     * @see \Components\Collection_Mutable::retainAll() \Components\Collection_Mutable::retainAll()
      */
     public function retainAll(Collection $collection_)
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Collection::arrayValue()
+    /**     * @see \Components\Collection::arrayValue() \Components\Collection::arrayValue()
      */
     public function arrayValue()
     {
       return $this->view->findAll();
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::current()
+    /**     * @see \Components\Iterator::current() \Components\Iterator::current()
      */
     public function current()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::key()
+    /**     * @see \Components\Iterator::key() \Components\Iterator::key()
      */
     public function key()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::hasNext()
+    /**     * @see \Components\Iterator::hasNext() \Components\Iterator::hasNext()
      */
     public function hasNext()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::hasPrevious()
+    /**     * @see \Components\Iterator::hasPrevious() \Components\Iterator::hasPrevious()
      */
     public function hasPrevious()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::next()
+    /**     * @see \Components\Iterator::next() \Components\Iterator::next()
      */
     public function next()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::previous()
+    /**     * @see \Components\Iterator::previous() \Components\Iterator::previous()
      */
     public function previous()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::rewind()
+    /**     * @see \Components\Iterator::rewind() \Components\Iterator::rewind()
      */
     public function rewind()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Iterator::valid()
+    /**     * @see \Components\Iterator::valid() \Components\Iterator::valid()
      */
     public function valid()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::hashCode()
+    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::equals()
+    /**     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
 
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Components\Object::__toString()
+    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
