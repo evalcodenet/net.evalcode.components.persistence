@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Query_Mongodb
    *
-   * @package net.evalcode.components
-   * @subpackage persistence
+   * @package net.evalcode.components.persistence
+   * @subpackage query
    *
    * @author evalcode.net
    *
@@ -23,7 +23,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
     public function __construct($key_, $name_, $value_, array $options_=array())
     {
       parent::__construct($key_, $name_);
@@ -34,8 +34,9 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Callable::__invoke() \Components\Callable::__invoke()
+    // OVERRIDES
+    /**
+     * @see \Components\Callable::__invoke() \Components\Callable::__invoke()
      */
     public function __invoke()
     {
@@ -55,7 +56,8 @@ namespace Components;
       return isset($this->m_result['ok']) && 1===(int)$this->m_result['ok'];
     }
 
-    /**     * @see \Components\Enumeration::__toString() \Components\Enumeration::__toString()
+    /**
+     * @see \Components\Enumeration::__toString() \Components\Enumeration::__toString()
      */
     public function __toString()
     {

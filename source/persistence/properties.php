@@ -7,8 +7,7 @@ namespace Components;
   /**
    * Persistence_Properties
    *
-   * @package net.evalcode.components
-   * @subpackage persistence
+   * @package net.evalcode.components.persistence
    *
    * @author evalcode.net
    *
@@ -102,11 +101,11 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|\Components\Persistence_Properties
+     * @var \Components\Persistence_Properties[]
      */
     private static $m_instance=array();
     /**
-     * @var array|string
+     * @var string[]
      */
     private static $m_mapEntityTypeByEntityName=array();
     //-----

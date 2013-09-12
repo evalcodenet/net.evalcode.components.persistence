@@ -7,10 +7,12 @@ namespace Components;
   /**
    * Entity_Default
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.entity
+   * @package net.evalcode.components.persistence
+   * @subpackage entity
    *
    * @author evalcode.net
+   *
+   * @api
    */
   class Entity_Default implements Entity
   {
@@ -24,14 +26,15 @@ namespace Components;
     /**
      * @transient
      *
-     * @var Components\Entity_Collection
+     * @var \Components\Entity_Collection
      */
     public $collection;
     //--------------------------------------------------------------------------
 
 
     // OVERRIDES
-    /**     * @see \Components\Serializable_Php::__sleep() \Components\Serializable_Php::__sleep()
+    /**
+     * @see \Components\Serializable_Php::__sleep() \Components\Serializable_Php::__sleep()
      */
     public function __sleep()
     {
@@ -43,7 +46,8 @@ namespace Components;
       return array('m_properties');
     }
 
-    /**     * @see \Components\Serializable_Php::__wakeup() \Components\Serializable_Php::__wakeup()
+    /**
+     * @see \Components\Serializable_Php::__wakeup() \Components\Serializable_Php::__wakeup()
      */
     public function __wakeup()
     {
@@ -53,14 +57,16 @@ namespace Components;
       self::$m_mapper->hydrate($this, $this->m_properties);
     }
 
-    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**     * @see \Components\Object::equals() \Components\Object::equals()
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -70,14 +76,16 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
       return Objects::toString($this);
     }
 
-    /**     * @see \Components\Serializable::serialVersionUid() \Components\Serializable::serialVersionUid()
+    /**
+     * @see \Components\Serializable::serialVersionUid() \Components\Serializable::serialVersionUid()
      */
     public function serialVersionUid()
     {

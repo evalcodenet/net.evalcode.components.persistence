@@ -7,10 +7,12 @@ namespace Components;
   /**
    * Entity_Collection
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.entity
+   * @package net.evalcode.components.persistence
+   * @subpackage entity
    *
    * @author evalcode.net
+   *
+   * @api
    */
   class Entity_Collection implements Collection_Mutable
   {
@@ -45,7 +47,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     public function save(Entity $entity_)
     {
       $properties=self::$m_objectMapper->dehydrateObjectOfType($entity_, get_class($entity_));
@@ -78,29 +80,33 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Collection::isEmpty() \Components\Collection::isEmpty()
+    // OVERRIDES
+    /**
+     * @see \Components\Collection::isEmpty() \Components\Collection::isEmpty()
      */
     public function isEmpty()
     {
       return 0===$this->view->count();
     }
 
-    /**     * @see \Components\Countable::count() \Components\Countable::count()
+    /**
+     * @see \Components\Countable::count() \Components\Countable::count()
      */
     public function count()
     {
       return $this->view->count();
     }
 
-    /**     * @see \Components\Collection_Mutable::clear() \Components\Collection_Mutable::clear()
+    /**
+     * @see \Components\Collection_Mutable::clear() \Components\Collection_Mutable::clear()
      */
     public function clear()
     {
       return $this->view->clear();
     }
 
-    /**     * @see \Components\Collection_Mutable::add() \Components\Collection_Mutable::add()
+    /**
+     * @see \Components\Collection_Mutable::add() \Components\Collection_Mutable::add()
      *
      * @param \Components\Entity $element_
      */
@@ -109,14 +115,16 @@ namespace Components;
       return $this->save($element_);
     }
 
-    /**     * @see \Components\Collection_Mutable::addAll() \Components\Collection_Mutable::addAll()
+    /**
+     * @see \Components\Collection_Mutable::addAll() \Components\Collection_Mutable::addAll()
      */
     public function addAll(Collection $collection_)
     {
 
     }
 
-    /**     * @see \Components\Collection_Mutable::remove() \Components\Collection_Mutable::remove()
+    /**
+     * @see \Components\Collection_Mutable::remove() \Components\Collection_Mutable::remove()
      *
      * @param \Components\Entity $element_
      */
@@ -137,98 +145,112 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Collection_Mutable::removeAll() \Components\Collection_Mutable::removeAll()
+    /**
+     * @see \Components\Collection_Mutable::removeAll() \Components\Collection_Mutable::removeAll()
      */
     public function removeAll(Collection $collection_)
     {
 
     }
 
-    /**     * @see \Components\Collection_Mutable::retainAll() \Components\Collection_Mutable::retainAll()
+    /**
+     * @see \Components\Collection_Mutable::retainAll() \Components\Collection_Mutable::retainAll()
      */
     public function retainAll(Collection $collection_)
     {
 
     }
 
-    /**     * @see \Components\Collection::arrayValue() \Components\Collection::arrayValue()
+    /**
+     * @see \Components\Collection::arrayValue() \Components\Collection::arrayValue()
      */
     public function arrayValue()
     {
       return $this->view->findAll();
     }
 
-    /**     * @see \Components\Iterator::current() \Components\Iterator::current()
+    /**
+     * @see \Components\Iterator::current() \Components\Iterator::current()
      */
     public function current()
     {
 
     }
 
-    /**     * @see \Components\Iterator::key() \Components\Iterator::key()
+    /**
+     * @see \Components\Iterator::key() \Components\Iterator::key()
      */
     public function key()
     {
 
     }
 
-    /**     * @see \Components\Iterator::hasNext() \Components\Iterator::hasNext()
+    /**
+     * @see \Components\Iterator::hasNext() \Components\Iterator::hasNext()
      */
     public function hasNext()
     {
 
     }
 
-    /**     * @see \Components\Iterator::hasPrevious() \Components\Iterator::hasPrevious()
+    /**
+     * @see \Components\Iterator::hasPrevious() \Components\Iterator::hasPrevious()
      */
     public function hasPrevious()
     {
 
     }
 
-    /**     * @see \Components\Iterator::next() \Components\Iterator::next()
+    /**
+     * @see \Components\Iterator::next() \Components\Iterator::next()
      */
     public function next()
     {
 
     }
 
-    /**     * @see \Components\Iterator::previous() \Components\Iterator::previous()
+    /**
+     * @see \Components\Iterator::previous() \Components\Iterator::previous()
      */
     public function previous()
     {
 
     }
 
-    /**     * @see \Components\Iterator::rewind() \Components\Iterator::rewind()
+    /**
+     * @see \Components\Iterator::rewind() \Components\Iterator::rewind()
      */
     public function rewind()
     {
 
     }
 
-    /**     * @see \Components\Iterator::valid() \Components\Iterator::valid()
+    /**
+     * @see \Components\Iterator::valid() \Components\Iterator::valid()
      */
     public function valid()
     {
 
     }
 
-    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
 
     }
 
-    /**     * @see \Components\Object::equals() \Components\Object::equals()
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
 
     }
 
-    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
@@ -239,7 +261,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|\Components\Entity
+     * @var \Components\Entity[]
      */
     private static $m_cache=array();
     /**

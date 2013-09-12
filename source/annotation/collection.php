@@ -7,10 +7,12 @@ namespace Components;
   /**
    * Annotation_Collection
    *
-   * @package net.evalcode.components
+   * @package net.evalcode.components.persistence
    * @subpackage annotation
    *
    * @author evalcode.net
+   *
+   * @api
    */
   class Annotation_Collection extends Annotation
   {

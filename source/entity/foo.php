@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Entity_Foo
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.entity
+   * @package net.evalcode.components.persistence
+   * @subpackage entity
    *
    * @author evalcode.net
    *
@@ -22,19 +22,16 @@ namespace Components;
      * @var string
      */
     public $id;
-
     /**
      * @unique
      * @var string
      */
     public $name;
-
     /**
      * @name created_at
      * @var Components\Date
      */
     public $createdAt;
-
     /**
      * @belongsTo nosql:components/entity/group
      */

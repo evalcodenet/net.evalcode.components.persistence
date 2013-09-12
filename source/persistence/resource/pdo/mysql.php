@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Persistence_Resource_Pdo_Mysql
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.resource.pdo
+   * @package net.evalcode.components.persistence
+   * @subpackage resource.pdo
    *
    * @author evalcode.net
    */
@@ -38,15 +38,17 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+    // OVERRIDES
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**     * @see \Components\Object::equals() \Components\Object::equals()
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -56,7 +58,8 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
@@ -70,14 +73,16 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    /**     * @see \Components\Persistence_Resource_Pdo::createDatabase() \Components\Persistence_Resource_Pdo::createDatabase()
+    /**
+     * @see \Components\Persistence_Resource_Pdo::createDatabase() \Components\Persistence_Resource_Pdo::createDatabase()
      */
     protected function createDatabase($database_, $username_)
     {
       $this->execute("CREATE DATABASE `{$database_}` DEFAULT CHARACTER SET '{$this->charset}' COLLATE '{$this->collation}'; GRANT ALL PRIVILEGES ON `{$database_}`.* TO '{$username_}'@'127.0.0.1'; FLUSH PRIVILEGES;");
     }
 
-    /**     * @see \Components\Persistence_Resource_Pdo::driverOptions() \Components\Persistence_Resource_Pdo::driverOptions()
+    /**
+     * @see \Components\Persistence_Resource_Pdo::driverOptions() \Components\Persistence_Resource_Pdo::driverOptions()
      */
     protected function driverOptions()
     {

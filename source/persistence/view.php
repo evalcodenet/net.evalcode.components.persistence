@@ -7,8 +7,7 @@ namespace Components;
   /**
    * Persistence_View
    *
-   * @package net.evalcode.components
-   * @subpackage persistence
+   * @package net.evalcode.components.persistence
    *
    * @author evalcode.net
    *
@@ -16,34 +15,32 @@ namespace Components;
    * @property \Components\Persistence_Resource resource
    *
    * @method \Components\Entity_Collection getIterator
+   *
+   * @api
    */
   interface Persistence_View extends Object, Iterable
   {
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     /**
      * @param scalar $primaryKey_
      *
-     * @return array|scalar
+     * @return scalar[]
      */
     function findByPk($primaryKey_);
-
     /**
-     * @param array|scalar $record_
+     * @param scalar[] $record_
      */
     function save(array $record_);
-
     /**
      * @param scalar $primaryKey_
      *
      * @return boolean
      */
     function remove($primaryKey_);
-
     /**
      * @return \Components\Entity_Collection
      */
     function collection();
-
     /**
      * @return \Components\Entity_Collection
      */

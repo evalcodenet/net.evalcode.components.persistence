@@ -7,14 +7,14 @@ namespace Components;
   /**
    * Persistence_Resource_Abstract
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.resource
+   * @package net.evalcode.components.persistence
+   * @subpackage resource
    *
    * @author evalcode.net
    */
   abstract class Persistence_Resource_Abstract implements Persistence_Resource
   {
-    // OVERRIDES/IMPLEMENTS
+    // OVERRIDES
     /**
      * @var string
      */
@@ -46,8 +46,9 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Persistence_Resource::save() \Components\Persistence_Resource::save()
+    // OVERRIDES
+    /**
+     * @see \Components\Persistence_Resource::save() \Components\Persistence_Resource::save()
      */
     public function save($table_, $primaryKey_, array $record_)
     {
@@ -65,7 +66,8 @@ namespace Components;
       return $result;
     }
 
-    /**     * @see \Components\Persistence_Resource::find() \Components\Persistence_Resource::find()
+    /**
+     * @see \Components\Persistence_Resource::find() \Components\Persistence_Resource::find()
      */
     public function find($table_, $property_, $value_)
     {
@@ -86,7 +88,8 @@ namespace Components;
       return null;
     }
 
-    /**     * @see \Components\Persistence_Resource::remove() \Components\Persistence_Resource::remove()
+    /**
+     * @see \Components\Persistence_Resource::remove() \Components\Persistence_Resource::remove()
      */
     public function remove($table_, $property_, $value_)
     {
@@ -104,7 +107,8 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Persistence_Resource::query() \Components\Persistence_Resource::query()
+    /**
+     * @see \Components\Persistence_Resource::query() \Components\Persistence_Resource::query()
      */
     public function query(Query $query_)
     {
@@ -121,21 +125,24 @@ namespace Components;
       return $this->{self::$m_methodExecute[Persistence::$debugMode&Persistence::BIT_NO_DEBUG]}($statement_);
     }
 
-    /**     * @see \Components\Persistence_Resource::transactionBegin() \Components\Persistence_Resource::transactionBegin()
+    /**
+     * @see \Components\Persistence_Resource::transactionBegin() \Components\Persistence_Resource::transactionBegin()
      */
     public function transactionBegin()
     {
       throw new Persistence_Exception('persistence/resource', 'Transactions are not supported.');
     }
 
-    /**     * @see \Components\Persistence_Resource::transactionCommit() \Components\Persistence_Resource::transactionCommit()
+    /**
+     * @see \Components\Persistence_Resource::transactionCommit() \Components\Persistence_Resource::transactionCommit()
      */
     public function transactionCommit()
     {
       throw new Persistence_Exception('persistence/resource', 'Transactions are not supported.');
     }
 
-    /**     * @see \Components\Persistence_Resource::transactionRollback() \Components\Persistence_Resource::transactionRollback()
+    /**
+     * @see \Components\Persistence_Resource::transactionRollback() \Components\Persistence_Resource::transactionRollback()
      */
     public function transactionRollback()
     {
@@ -161,7 +168,7 @@ namespace Components;
     // INTERNAL ACCESSORS
     /**
      * @param string $collection_
-     * @param array|scalar $properties_
+     * @param scalar[] $properties_
      *
      * @return mixed
      */
@@ -258,8 +265,10 @@ namespace Components;
       0=>'debugRemov',
       1=>'removeImpl'
     );
-    /**
-     * @var \Components\Object_Mapper
+
+
+  /**
+   * @var \Components\Object_Mapper
      */
     protected static $m_objectMapper;
 
@@ -267,17 +276,21 @@ namespace Components;
     private static $m_cacheResults=array();
     private static $m_cacheFlushed=false;
 
-    /**
-     * @var \Components\Uri
+
+  /**
+   * @var \Components\Uri
      */
     protected $m_uri;
 
-    /**
-     * @var string
+
+  /**
+   * @var string
      */
     private $m_cacheNamespace;
-    /**
-     * @var boolean|null
+
+
+  /**
+   * @var boolean|null
      */
     private $m_isReadOnly;
     //-----
@@ -288,21 +301,23 @@ namespace Components;
      * @param string $property_
      * @param scalar $value_
      *
-     * @return array|scalar
+     * @return scalar[]
      */
     abstract protected function findImpl($table_, $property_, $value_);
 
-    /**
-     * @param string $table_
+
+  /**
+   * @param string $table_
      * @param string $primaryKey_
-     * @param array|scalar $record_
+     * @param scalar[] $record_
      *
      * @return scalar
      */
     abstract protected function saveImpl($table_, $primaryKey_, array $record_);
 
-    /**
-     * @param string $table_
+
+  /**
+   * @param string $table_
      * @param string $property_
      * @param scalar $value_
      *
@@ -310,13 +325,15 @@ namespace Components;
      */
     abstract protected function removeImpl($table_, $property_, $value_);
 
-    /**
-     * @param \Components\Query $query_
+
+  /**
+   * @param \Components\Query $query_
      */
     abstract protected function queryImpl(Query $query_);
 
-    /**
-     * @param string $statement_
+
+  /**
+   * @param string $statement_
      */
     abstract protected function executeImpl($statement_);
 
@@ -354,7 +371,7 @@ namespace Components;
      * @param string $table_
      * @param string $property_
      * @param scalar $value_
-     * @param array|scalar $record_
+     * @param scalar[] $record_
      */
     protected function addToResultsCache($table_, $property_, $value_, array $record_)
     {
@@ -366,7 +383,7 @@ namespace Components;
      * @param string $property_
      * @param scalar $value_
      *
-     * @return false|array|scalar $record_
+     * @return false|scalar[] $record_
      */
     protected function loadFromResultsCache($table_, $property_, $value_)
     {
@@ -383,7 +400,7 @@ namespace Components;
      * @param string $table_
      * @param string $property_
      * @param scalar $value_
-     * @param array|scalar $record_
+     * @param scalar[] $record_
      */
     protected function removeFromResultsCache($table_, $property_, $value_)
     {

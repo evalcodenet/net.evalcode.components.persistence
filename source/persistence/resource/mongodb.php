@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Persistence_Resource_Mongodb
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.resource
+   * @package net.evalcode.components.persistence
+   * @subpackage resource
    *
    * @author evalcode.net
    */
@@ -34,7 +34,7 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     public function collectionExists($name_)
     {
       if(null===$this->m_collections)
@@ -82,8 +82,9 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES/IMPLEMENTS
-    /**     * @see \Components\Persistence_Resource::view() \Components\Persistence_Resource::view()
+    // OVERRIDES
+    /**
+     * @see \Components\Persistence_Resource::view() \Components\Persistence_Resource::view()
      *
      * @return \Components\Persistence_View_Mongodb
      */
@@ -97,7 +98,8 @@ namespace Components;
       return new Persistence_View_Mongodb($this, $properties_);
     }
 
-    /**     * @see \Components\Persistence_Resource::connection() \Components\Persistence_Resource::connection()
+    /**
+     * @see \Components\Persistence_Resource::connection() \Components\Persistence_Resource::connection()
      *
      * @return \MongoDB
      */
@@ -114,7 +116,8 @@ namespace Components;
       return $this->m_database;
     }
 
-    /**     * @see \Components\Persistence_Resource::driver() \Components\Persistence_Resource::driver()
+    /**
+     * @see \Components\Persistence_Resource::driver() \Components\Persistence_Resource::driver()
      *
      * @return \MongoClient
      */
@@ -153,14 +156,16 @@ namespace Components;
       return $this->m_driver;
     }
 
-    /**     * @see \Components\Object::hashCode() \Components\Object::hashCode()
+    /**
+     * @see \Components\Object::hashCode() \Components\Object::hashCode()
      */
     public function hashCode()
     {
       return object_hash($this);
     }
 
-    /**     * @see \Components\Object::equals() \Components\Object::equals()
+    /**
+     * @see \Components\Object::equals() \Components\Object::equals()
      */
     public function equals($object_)
     {
@@ -170,7 +175,8 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Object::__toString() \Components\Object::__toString()
+    /**
+     * @see \Components\Object::__toString() \Components\Object::__toString()
      */
     public function __toString()
     {
@@ -201,14 +207,16 @@ namespace Components;
     //-----
 
 
-    /**     * @see \Components\Persistence_Resource_Abstract::findImpl() \Components\Persistence_Resource_Abstract::findImpl()
+    /**
+     * @see \Components\Persistence_Resource_Abstract::findImpl() \Components\Persistence_Resource_Abstract::findImpl()
      */
     protected function findImpl($table_, $property_, $value_)
     {
 
     }
 
-    /**     * @see \Components\Persistence_Resource_Abstract::saveImpl() \Components\Persistence_Resource_Abstract::saveImpl()
+    /**
+     * @see \Components\Persistence_Resource_Abstract::saveImpl() \Components\Persistence_Resource_Abstract::saveImpl()
      */
     protected function saveImpl($table_, $primaryKey_, array $record_)
     {
@@ -224,21 +232,24 @@ namespace Components;
       return false;
     }
 
-    /**     * @see \Components\Persistence_Resource_Abstract::removeImpl() \Components\Persistence_Resource_Abstract::removeImpl()
+    /**
+     * @see \Components\Persistence_Resource_Abstract::removeImpl() \Components\Persistence_Resource_Abstract::removeImpl()
      */
     protected function removeImpl($table_, $property_, $value_)
     {
 
     }
 
-    /**     * @see \Components\Persistence_Resource::executeImpl() \Components\Persistence_Resource::executeImpl()
+    /**
+     * @see \Components\Persistence_Resource::executeImpl() \Components\Persistence_Resource::executeImpl()
      */
     protected function executeImpl($statement_)
     {
       return $this->connection()->execute($statement_);
     }
 
-    /**     * @see \Components\Persistence_Resource::queryImpl() \Components\Persistence_Resource::queryImpl()
+    /**
+     * @see \Components\Persistence_Resource::queryImpl() \Components\Persistence_Resource::queryImpl()
      */
     protected function queryImpl(Query $query_)
     {

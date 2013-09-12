@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Entity
    *
-   * @package net.evalcode.components
-   * @subpackage persistence
+   * @api
+   * @package net.evalcode.components.persistence
    *
    * @author evalcode.net
    */

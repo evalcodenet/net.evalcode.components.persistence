@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Persistence
    *
-   * @package net.evalcode.components
-   * @subpackage persistence
+   * @api
+   * @package net.evalcode.components.persistence
    *
    * @author evalcode.net
    */
@@ -34,7 +34,7 @@ namespace Components;
     // STATIC ACCESSORS
     /**
      * @param string $name_
-     * @param array|string $args_
+     * @param string[] $args_
      *
      * @return \Components\Persistence_Resource|\Components\Entity_Collection
      */
@@ -51,7 +51,7 @@ namespace Components;
 
     /**
      * @param string $name_
-     * @param array|string $connectionUris_
+     * @param string[] $connectionUris_
      */
     public static function registerResource($name_, array $connectionUris_)
     {
@@ -123,7 +123,7 @@ namespace Components;
 
     // IMPLEMENTATION
     /**
-     * @var array|\Components\Persistence_Resource_Pool
+     * @var \Components\Persistence_Resource_Pool[]
      */
     private static $m_resources=array();
     private static $m_resourceIdentifiers=array();

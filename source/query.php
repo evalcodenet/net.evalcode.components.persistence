@@ -7,7 +7,8 @@ namespace Components;
   /**
    * Query
    *
-   * @package net.evalcode.components
+   * @api
+   * @package net.evalcode.components.persistence
    * @subpackage persistence
    *
    * @author evalcode.net

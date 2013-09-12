@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Persistence_Exception_Pdo
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.exception
+   * @package net.evalcode.components.persistence
+   * @subpackage exception
    *
    * @author evalcode.net
    */

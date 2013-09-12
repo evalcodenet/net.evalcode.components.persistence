@@ -7,8 +7,8 @@ namespace Components;
   /**
    * Persistence_Resource_Schema
    *
-   * @package net.evalcode.components
-   * @subpackage persistence.resource
+   * @package net.evalcode.components.persistence
+   * @subpackage resource
    *
    * @author evalcode.net
    *
@@ -16,7 +16,7 @@ namespace Components;
    */
   class Persistence_Resource_Schema extends Rest_Resource
   {
-    // ACCESSORS/MUTATORS
+    // ACCESSORS
     /**
      * @GET
      * @POST
@@ -43,7 +43,6 @@ namespace Components;
 
       $name=$properties->collectionName;
       $primaryKey=$properties->collectionPrimaryKey;
-
 
       // TODO Migrate schema ...
     }
