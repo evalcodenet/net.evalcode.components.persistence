@@ -13,7 +13,7 @@ namespace Components;
    *
    * @author evalcode.net
    */
-  interface Query extends Callable
+  interface Query extends Closure
   {
 
   }

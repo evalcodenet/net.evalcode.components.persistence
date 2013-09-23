@@ -36,7 +36,7 @@ namespace Components;
 
     // OVERRIDES
     /**
-     * @see \Components\Callable::__invoke() \Components\Callable::__invoke()
+     * @see \Components\Closure::__invoke() \Components\Closure::__invoke()
      */
     public function __invoke()
     {
