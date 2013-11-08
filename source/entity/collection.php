@@ -42,7 +42,7 @@ namespace Components;
       if(null===self::$m_objectMapper)
         self::$m_objectMapper=new Object_Mapper();
       if(false===isset(self::$m_cache[$this->properties->collectionName]))
-        self::$m_cache[$this->properties->collectionName]=array();
+        self::$m_cache[$this->properties->collectionName]=[];
     }
     //--------------------------------------------------------------------------
 
@@ -263,7 +263,7 @@ namespace Components;
     /**
      * @var \Components\Entity[]
      */
-    private static $m_cache=array();
+    private static $m_cache=[];
     /**
      * @var \Components\Object_Mapper
      */

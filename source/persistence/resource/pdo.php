@@ -228,7 +228,7 @@ namespace Components;
     protected function driverOptions()
     {
       // Override for vendor specific PDO connection properties ...
-      return array();
+      return [];
     }
     //--------------------------------------------------------------------------
   }

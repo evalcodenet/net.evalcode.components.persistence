@@ -272,8 +272,8 @@ namespace Components;
      */
     protected static $m_objectMapper;
 
-    private static $m_cache=array();
-    private static $m_cacheResults=array();
+    private static $m_cache=[];
+    private static $m_cacheResults=[];
     private static $m_cacheFlushed=false;
 
 

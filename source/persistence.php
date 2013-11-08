@@ -38,7 +38,7 @@ namespace Components;
      *
      * @return \Components\Persistence_Resource|\Components\Entity_Collection
      */
-    public static function __callStatic($name_, array $args_=array())
+    public static function __callStatic($name_, array $args_=[])
     {
       if(false===isset(self::$m_resources[$name_]))
         static::resource($name_);
@@ -125,8 +125,8 @@ namespace Components;
     /**
      * @var \Components\Persistence_Resource_Pool[]
      */
-    private static $m_resources=array();
-    private static $m_resourceIdentifiers=array();
+    private static $m_resources=[];
+    private static $m_resourceIdentifiers=[];
     //--------------------------------------------------------------------------
   }
 ?>

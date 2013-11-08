@@ -103,11 +103,11 @@ namespace Components;
     /**
      * @var \Components\Persistence_Properties[]
      */
-    private static $m_instance=array();
+    private static $m_instance=[];
     /**
      * @var string[]
      */
-    private static $m_mapEntityTypeByEntityName=array();
+    private static $m_mapEntityTypeByEntityName=[];
     //-----
 
 

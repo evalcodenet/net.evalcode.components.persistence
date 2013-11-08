@@ -23,7 +23,7 @@ namespace Components;
   {
     if($active_)
     {
-      $bits=array();
+      $bits=[];
       if(isset($flags_[Persistence::LOG_STATEMENTS]))
         $bits[]=Persistence::BIT_LOG_STATEMENTS;
       if(isset($flags_[Persistence::LOG_QUERIES]))

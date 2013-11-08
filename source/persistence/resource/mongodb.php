@@ -135,7 +135,7 @@ namespace Components;
         {
           $this->m_databaseName=$this->m_uri->getPathParam(0);
           $this->m_connectionString=(string)$this->m_uri;
-          $this->m_connectionOptions=array();
+          $this->m_connectionOptions=[];
         }
         else
         {
@@ -190,7 +190,7 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private $m_connectionOptions=array();
+    private $m_connectionOptions=[];
     private $m_connectionString;
     private $m_isolated=false;
     private $m_collections;

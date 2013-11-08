@@ -196,8 +196,8 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private $m_read=array();
-    private $m_write=array();
+    private $m_read=[];
+    private $m_write=[];
     //--------------------------------------------------------------------------
   }
 ?>
