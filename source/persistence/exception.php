@@ -13,7 +13,7 @@ namespace Components;
    *
    * @api
    */
-  class Persistence_Exception extends Runtime_Exception
+  class Persistence_Exception extends Runtime_Exception_Abstract
   {
 
   }
