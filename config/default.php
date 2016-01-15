@@ -4,19 +4,23 @@
 namespace Components;
 
 
-  Annotations::registerAnnotations(array(
+  Annotations::registerAnnotations([
     Annotation_Cache::NAME=>Annotation_Cache::TYPE,
     Annotation_Collection::NAME=>Annotation_Collection::TYPE,
     Annotation_Id::NAME=>Annotation_Id::TYPE,
     Annotation_Transient::NAME=>Annotation_Transient::TYPE
-  ));
+  ]);
 
 
   Resource_Type::registerResourceType('mysql', Persistence_Resource_Pdo_Mysql::type());
   Resource_Type::registerResourceType('mongodb', Persistence_Resource_Mongodb::type());
 
-
   Persistence_Resource_Schema::serve('schema');
+
+
+  Persistence::registerResource('nosql', [
+    'mongodb://127.0.0.1/'.COMPONENTS_INSTANCE_CODE
+  ]);
 
 
   Debug::addFlagListener(function($active_, array $flags_)

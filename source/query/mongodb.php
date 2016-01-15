@@ -24,7 +24,7 @@ namespace Components;
 
 
     // OVERRIDES
-    public function __construct($key_, $name_, $value_, array $options_=array())
+    public function __construct($key_, $name_, $value_, array $options_=[])
     {
       parent::__construct($key_, $name_);
 
@@ -34,15 +34,20 @@ namespace Components;
     //--------------------------------------------------------------------------
 
 
-    // OVERRIDES
+    // ACCESSORS/MUTATORS
     /**
-     * @see \Components\Closure::__invoke() \Components\Closure::__invoke()
+     * @return boolean
      */
-    public function __invoke()
+    public function ok()
     {
-      return array_merge(array($this->name()=>$this->m_value), $this->m_options);
+      return isset($this->m_result['ok']) && 1===(int)$this->m_result['ok'];
     }
 
+    /**
+     * @param scalar $result_
+     *
+     * @return scalar
+     */
     public function result($result_=null)
     {
       if(null===$result_)
@@ -50,14 +55,20 @@ namespace Components;
 
       $this->m_result=$result_;
     }
+    //--------------------------------------------------------------------------
 
-    public function ok()
+
+    // OVERRIDES/IMPLEMENTS
+    /**
+     * @see \Components\Closure::__invoke() __invoke
+     */
+    public function __invoke()
     {
-      return isset($this->m_result['ok']) && 1===(int)$this->m_result['ok'];
+      return array_merge([$this->name()=>$this->m_value], $this->m_options);
     }
 
     /**
-     * @see \Components\Enumeration::__toString() \Components\Enumeration::__toString()
+     * @see \Components\Enumeration::__toString() __toString
      */
     public function __toString()
     {
@@ -73,18 +84,27 @@ namespace Components;
 
 
     // IMPLEMENTATION
-    private $m_options=array();
+    /**
+     * @var scalar[]
+     */
+    private $m_options=[];
+    /**
+     * @var scalar
+     */
     private $m_value;
+    /**
+     * @var scalar
+     */
     private $m_result;
     //-----
 
 
     public static function values()
     {
-      return array(
+      return [
         'CREATE_COLLECTION',
         'DROP_COLLECTION'
-      );
+      ];
     }
     //--------------------------------------------------------------------------
   }

@@ -93,7 +93,7 @@ namespace Components;
      */
     public function hashCode()
     {
-      return string_hash($this->properties->collectionName);
+      return \math\hashs($this->properties->collectionName);
     }
 
     /**
